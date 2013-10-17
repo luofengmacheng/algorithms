@@ -5,14 +5,16 @@
  * info:	最长回文子串
  * solution URL:http://blog.csdn.net/hopeztm/article/details/7932245
                 http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
+ * remark:	对最笨的方法进行了两次改进，但是由于两次改进都使用了动态内存分配，因此，改进后的时间比最笨的办法时间还长，而且，随着字符串长度的增加，所分配的内存空间成倍增加，耗费的时间更长，当然，如果能够采用静态分配空间的话，相信改进方法还是可以带来时间上的减少，只是这样不够灵活
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 
 /* 最笨的办法，从第一个开始逐个判断，分偶数和奇数的情况分别向两边扩散，当找到第一个不一样的字符时结束 */
-void longest_pal_substr(char *str, int size, char *substr)
+void longest_pal_substr1(char *str, int size, char *substr)
 {
     int i = 0;
     int mid = 0, max_mid = 0, radius = 0, max_len = 0;
@@ -84,7 +86,6 @@ void longest_pal_substr2(char *str, int size, char *substr)
     char *newstr = (char*)calloc(size*2+1, sizeof(char));
     strncpy(newstr, str, size);
     add_flag(newstr, size);
-    printf("%s\n", newstr);
 
     int i = 0, mid = 0, radius = 0;
     int len = size*2+1;
@@ -114,15 +115,49 @@ void longest_pal_substr2(char *str, int size, char *substr)
     free(newstr);
 }
 
+#define min(a, b) (a)<=(b) ? (a) : (b)
+
 /* 优化二：使用Manacher's Algorithm */
 void longest_pal_substr3(char *str, int size, char *substr)
 {
     int newlen = 2*size+1;
     char *newstr = (char*)calloc(newlen, sizeof(char));
     int *P = (int*)calloc(newlen, sizeof(int));
+    strncpy(newstr, str, size);
     add_flag(newstr, size);
 
-    int i
+    int i = 0, i_mirror = 0;
+    int center = 0, radius = 0;
+    for(i = 0; i < newlen; i++) {
+        i_mirror = 2*center-i;
+
+        P[i] = (radius>i) ? min(radius-i, P[i_mirror]) : 0;
+
+        while(newstr[i+1+P[i]] == newstr[i-1-P[i]])
+            P[i]++;
+
+        if(i+P[i] > radius) {
+            center = i;
+            radius = i+P[i];
+        }
+    }
+
+    int max_len = 0;
+    int center_index = 0;
+    for(i = 0; i < newlen; i++) {
+        if(P[i] > max_len) {
+            max_len = P[i];
+            center_index = i;
+        }
+    }
+
+    //printf("center: %d\tmax_len: %d\n", center_index, max_len);
+    int sub_len = 2*max_len+1;
+    char *new_substr = (char*)calloc(sub_len, sizeof(char));
+    strncpy(new_substr, newstr+center_index-max_len, sub_len);
+    //printf("%s\n", new_substr);
+    remove_flag(new_substr, sub_len);
+    strncpy(substr, new_substr, max_len);
 
     free(P);
     free(newstr);
@@ -130,10 +165,25 @@ void longest_pal_substr3(char *str, int size, char *substr)
 
 int main(int argc, char *argv[])
 {
-    char arr[8] = "abcddca";
-    char buf[8] = "";
-    longest_pal_substr2(arr, strlen(arr), buf);
+    long start_sec, finish_sec, start_usec, finish_usec;
+    struct timeval tv;
+    struct timezone tz;
+
+    gettimeofday(&tv, &tz);
+    start_sec = tv.tv_sec;
+    start_usec = tv.tv_usec;
+
+    char arr[] = "abacbaabcccccbaedljfkaljkdlfjkajfdkajskkhdsjdfhkshjdfhsjfhkdjhsjkfhdkjshdjfkshdfdjskhdjkfshdkjfhsfjsakjdfkaj";
+    char buf[512] = "";
+    longest_pal_substr3(arr, strlen(arr), buf);
     printf("%s\n", buf);
+
+    gettimeofday(&tv, &tz);
+    finish_sec = tv.tv_sec;
+    finish_usec = tv.tv_usec;
+
+    double duration = (double)(finish_usec-start_usec)/1000+(finish_sec-start_sec)*1000;
+    printf("Runtime: %.3fms\n", duration);
 
     return 0;
 }

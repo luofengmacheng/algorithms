@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     finish_usec = tv.tv_usec;
 
     double duration = (double)(finish_usec-start_usec)/1000+(finish_sec-start_sec)*1000;
-    printf("Runtime: %.2fms\n", duration);
+    printf("Runtime: %.3fms\n", duration);
 
     return 0;
 }
