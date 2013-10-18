@@ -1,7 +1,7 @@
 /*
  * author:	luo feng
  * date:	2013/10/18
- * source:	Project Euler.net
+ * source:	Problem 5 of Project Euler.net
  * title:	Smallest multiple
  * solution URL:http://m.blog.csdn.net/blog/acmjk/9767779
  * remark:	最简单的方法是采用迭代的方式逐个两两求最小公倍数，

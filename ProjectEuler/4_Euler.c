@@ -1,7 +1,7 @@
 /*
  * author:	luo feng
  * date:	2013/10/17
- * source:	Project Euler.net
+ * source:	Problem 4 of Project Euler.net
  * title:	Largest palindrome product
  * info:
 
