@@ -3,7 +3,7 @@
  * date:	2013/10/16
  * source:	Problem 3 of Project Euler.net
  * title:	Largest prime factor
- * remark:	本题没有得出结果，对于较小的数可以得出正确结果，不知道是因为该方法对大数有问题，还是因为处理器太慢了，不过这样解这道题确实太笨了
+ * remark:	本题最终得到了正确结果，但是运行了28984404.55ms，大约8个小时，所以，该程序有很大的改进空间，比如，如何判断素数
  * info:
 
 The prime factors of 13195 are 5, 7, 13 and 29.

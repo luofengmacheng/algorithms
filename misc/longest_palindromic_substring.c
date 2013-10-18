@@ -127,18 +127,18 @@ void longest_pal_substr3(char *str, int size, char *substr)
     add_flag(newstr, size);
 
     int i = 0, i_mirror = 0;
-    int center = 0, radius = 0;
+    int center = 0, right = 0;
     for(i = 0; i < newlen; i++) {
         i_mirror = 2*center-i;
 
-        P[i] = (radius>i) ? min(radius-i, P[i_mirror]) : 0;
+        P[i] = (right>i) ? min(right-i, P[i_mirror]) : 0;
 
         while(newstr[i+1+P[i]] == newstr[i-1-P[i]])
             P[i]++;
 
-        if(i+P[i] > radius) {
+        if(i+P[i] > right) {
             center = i;
-            radius = i+P[i];
+            right = i+P[i];
         }
     }
 
