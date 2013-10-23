@@ -1,0 +1,21 @@
+有些比较难的题目，而且不好想：
+
+1 Reverse Integer 要求将一个整数进行翻转，123->321，在提示中说要考虑翻转后溢出的问题，但是，在提交代码的时候却不需要。
+
+2 Best Time to Buy and Sell Stock II 要求买卖股票的最大收益，不过题目的意思还是不太明白
+
+3 Unique Binary Search Trees
+
+4 Populating Next Right Pointers in Each Node
+最简单的办法是用队列进行层次遍历，但是这样队列需要很大的存储空间，因此，在该树是完全二叉树时，可以用两个指针进行遍历，一个指针从第一个节点开始，每次都取左孩子，另一个指针从之前的指针的孩子开始，遍历该层节点
+
+5 Climbing Stairs
+
+6 Maximum Subarray
+最大子段和，最简单的方法是计算任意区间的和，并与最大和进行比较；第二种方法是分治法，即二分法；第三种方法是动态规划
+
+7 Convert Sorted Array to Binary Search Tree
+要求是得到高度平衡的二叉搜索树，于是，每次从中间分开，左边是左子树，右边是右子数
+
+8 Symmetric Tree
+对称树，判断一棵树是否是对称的
