@@ -17,7 +17,7 @@ public:
         return new base(*this);
     }
 
-    virtual void func()
+    virtual void func() const
     {
         cout << "base function is called" << endl;
     }
@@ -30,7 +30,7 @@ public:
         return new derived(*this);
     }
 
-    void func()
+    void func() const
     {
         cout << "derived function is called" << endl;
     }
