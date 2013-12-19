@@ -142,6 +142,36 @@ public:
         }
         return vec;
     }
+
+    vector<int> postorderTraversal(TreeNode *root)
+    {
+        stack<pair<TreeNode *, int> > sta;
+        TreeNode *pnode = root;
+        vector<int> vec;
+        pair<TreeNode *, int> ptnode;
+
+        while(pnode || !sta.empty()) {
+            while(pnode) {
+                sta.push(make_pair(pnode, 0));
+                pnode = pnode->left;
+            }
+            if(!sta.empty()) {
+                ptnode = sta.top();
+
+                if(!ptnode.first->right || ptnode.second) {
+                    sta.pop();
+                    vec.push_back(ptnode.first->val);
+                }
+                else {
+                    ptnode.second = 1;
+                    sta.pop();
+                    sta.push(ptnode);
+                    pnode = ptnode.first->right;
+                }
+            }
+        }
+        return vec;
+    }
 };
 
 void print_res(int x)
