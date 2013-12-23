@@ -28,7 +28,7 @@ class Solution {
 public:
     static bool cmp_func(const Interval &i1, const Interval &i2)
     {
-        return i1.start < i2.start;
+        return i1.start <= i2.start;
     }
 
     vector<Interval> merge(vector<Interval> &intervals)
