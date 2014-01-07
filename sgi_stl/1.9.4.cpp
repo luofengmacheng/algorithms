@@ -43,7 +43,7 @@ public:
     {
         cout << boolalpha << (typeid(const INT) == typeid(*this)) << endl;
         cout << boolalpha << (typeid(const int) == typeid(m_i)) << endl;
-        return (int&)m_i;
+        return m_i;
     }
 
 private:
@@ -64,6 +64,10 @@ int main()
     cout << I-- << endl;
     cout << --I << endl;
     cout << *I << endl;
+
+    int i = 0;
+    cout << ++++i << endl;
+    //cout << i++++ << endl;
 
     return 0;
 }
