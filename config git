@@ -1,6 +1,6 @@
 1 install
-sudo apt-get install apt
-sudo apt-get install apt-core
+sudo apt-get install git
+sudo apt-get install git-core
 
 2 config
 git config --global user.name nikename
