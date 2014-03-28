@@ -1,7 +1,11 @@
 There are some common data structures and algorithms.
-hdu_oj: mysolutions to HDU OJ
-intro_algorithm: Introduction to Algorithms
-LeetCode: my solutions to LeetCode OJ
-ProjectEuler: my solutions to Project Euler.net
-sort: sorting algorithms
-stack: stack data structure
+apue:		Advanced Programming under the Unix Environment
+cpp_primer:	C++ Primer
+hdu_oj:		mysolutions to HDU OJ
+intro_algorithm:	Introduction to Algorithms
+jobdu_oj: 	my solutions to Jobdu OJ
+LeetCode:	my solutions to LeetCode OJ
+ProjectEuler:	my solutions to Project Euler.net
+sgi_stl:	SGI STL
+sort:		sorting algorithms
+stack:		stack data structure
