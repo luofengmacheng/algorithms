@@ -3,7 +3,7 @@
  * date:	2014/3/27 - 2014/3/28
  * title:	Binary Search Tree
  * language:	C++
- * info:	按照STL的规则实现了二叉查找数（二叉排序树），由于只有节点的前趋和后继需要使用到节点的父节点指针，为了方便，没有在节点中设置父节点指针，因此，也没有实现迭代器的自增和自减操作
+ * info:	按照STL的规则实现了二叉查找数（二叉排序树），由于只有节点的前趋和后继需要使用到节点的父节点指针，为了方便，没有在节点中设置父节点指针，因此，也没有实现迭代器的自增和自减操作。另外，to_linked_list()为july的微软面试100题中的第一题，其实本不应该作为成员函数的。
  */
 
 #include <iostream>
@@ -19,7 +19,7 @@ struct bst_node_base {
 	bst_node_base(K k, V v) : key(k), value(v), left(NULL), right(NULL) { }
 };
 
-template < typename K, typename V>
+template < typename K, typename V >
 struct bst_iterator {
 	bst_node_base<K, V> *cur;
 
@@ -29,18 +29,18 @@ struct bst_iterator {
 	//const bst_iterator operator++(int);
 	//bst_iterator& operator--();
 	//const bst_iterator operator--(int);
-	bool operator==(bst_iterator&);
-	bool operator!=(bst_iterator&);
+	bool operator==(const bst_iterator&);
+	bool operator!=(const bst_iterator&);
 };
 
-template < typename K, typename V>
-bool bst_iterator<K, V>::operator==(bst_iterator &iter)
+template < typename K, typename V >
+bool bst_iterator<K, V>::operator==(const bst_iterator &iter)
 {
 	return cur == iter.cur;
 }
 
-template < typename K, typename V>
-bool bst_iterator<K, V>::operator!=(bst_iterator &iter)
+template < typename K, typename V >
+bool bst_iterator<K, V>::operator!=(const bst_iterator &iter)
 {
 	return cur != iter.cur;
 }
