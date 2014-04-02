@@ -7,9 +7,7 @@
  */
 
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <iterator>
 using namespace std;
 
 template < typename K, typename V, typename H = int >
