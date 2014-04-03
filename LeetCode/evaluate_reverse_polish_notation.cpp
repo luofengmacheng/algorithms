@@ -34,7 +34,7 @@ public:
 		}
 	}
 
-	/*bool isdata(string str)
+	bool isdata(string str)
 	{
 		string::iterator iter = str.begin();
 		if(*iter == '-') {
@@ -49,7 +49,7 @@ public:
 		else {
 			return false;
 		}
-	}*/
+	}
 
 	int evalRPN(vector<string> &tokens)
 	{
