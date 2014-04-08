@@ -15,7 +15,7 @@ struct avl_node_base {
 	K key;
 	V value;
 	H height;
-	avl_node_base *left, *right;
+	avl_node_base *left, *right, *parent;
 	avl_node_base(K k, V v, H h) : key(k), value(v), height(h), left(NULL), right(NULL) { }
 };
 
@@ -148,7 +148,7 @@ avl_search_tree<K, V>::~avl_search_tree()
 }
 
 template < typename K, typename V >
-void avl_search_tree<K, V>::single_left_rotate(avl_node *&pnode)
+void avl_search_tree<K, V>::single_right_rotate(avl_node *&pnode)
 {
 	avl_node *lchild = pnode->left;
 	pnode->left = lchild->right;
@@ -159,7 +159,7 @@ void avl_search_tree<K, V>::single_left_rotate(avl_node *&pnode)
 }
 
 template < typename K, typename V >
-void avl_search_tree<K, V>::single_right_rotate(avl_node *&pnode)
+void avl_search_tree<K, V>::single_left_rotate(avl_node *&pnode)
 {
 	avl_node *rchild = pnode->right;
 	pnode->right = rchild->left;
@@ -172,15 +172,15 @@ void avl_search_tree<K, V>::single_right_rotate(avl_node *&pnode)
 template < typename K, typename V >
 void avl_search_tree<K, V>::double_lr_rotate(avl_node *&pnode)
 {
-	single_right_rotate(pnode->left);
-	single_left_rotate(pnode);
+	single_left_rotate(pnode->left);
+	single_right_rotate(pnode);
 }
 
 template < typename K, typename V >
 void avl_search_tree<K, V>::double_rl_rotate(avl_node *&pnode)
 {
-	single_left_rotate(pnode->right);
-	single_right_rotate(pnode);
+	single_right_rotate(pnode->right);
+	single_left_rotate(pnode);
 }
 
 //用递归的方法插入关键字，插入了之后，要判断当前子树是否平衡，如果不平衡，就要进行调整。操作完了之后要进行节点的高度的更新。
