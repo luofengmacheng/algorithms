@@ -1,0 +1,464 @@
+/*
+ * author:	luo feng
+ * date:	2014/4/2 - 2014/4/
+ * title:	Red Black Tree
+ * language:	C++
+ * info:	2014/4/8 insert
+ * 			2014/4/9 predecessor, successor
+ *			2014/4/10 erase
+ *			2014/4/11 test this program
+ * problem:	
+ * bug 1:   在对树进行调整时（rbt_insert_fixup），由于调整时可能会涉及到根节点，但是修改过程中并没有判断根节点，
+ *          因此，可能会出现根节点还是指向原来所指的节点，但是树的根已经改变了，导致遍历整个树时节点丢失和内存泄漏。
+ * 			            4(BLACK)
+ * 		               / \
+ *             (BLACK)3   5(BLACK)
+ *                         \
+ *                          8(RED)
+ *                         /
+ *                        7(RED)
+ *
+ * bug 2:   在对某个子树进行旋转时（left_rotate or right_rotate or double rotate），由于是用临时节点来依次往上进行调整，
+ *          因此，在旋转时使用的临时节点进行旋转，但是，并没有修改当前子树根节点的父节点的子树指针，因此，这棵树有可能已经不能如预期一样了。
+ * 			比如：
+ *			            4(BLACK)
+ * 		               / \
+ *             (BLACK)3   5(BLACK)
+ *                         \
+ *                          8(RED)
+ *                         /
+ *                        7(RED)
+ * 			对于上面的树，当前pnode指向节点7，那么就需要进行调整，而且先要进行
+ */
+
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <iterator>
+using namespace std;
+
+enum COLOR {
+	RED, BLACK
+};
+
+template < typename K, typename V >
+struct rbt_node_base {
+	pair<K, V> data;
+	rbt_node_base *left, *right, *parent;
+	COLOR color;
+
+	rbt_node_base(K k, V v) : left(NULL), right(NULL), parent(NULL)
+	{
+		data.first = k;
+		data.second = v;
+		color = RED;
+	}
+	K key()
+	{
+		return data.first;
+	}
+	V& value()
+	{
+		return data.second;
+	}
+};
+
+template < typename K, typename V >
+struct rbt_iterator {
+	rbt_node_base<K, V> *cur;
+
+	typedef pair<K, V> value_type;
+	typedef value_type *pointer;
+	typedef value_type &reference;
+	//rbt_iterator& operator++();
+	//const rbt_iterator operator++(int);
+	//rbt_iterator& operator--();
+	//const rbt_iterator operator--(int);
+
+	bool operator==(const rbt_iterator&);
+	bool operator!=(const rbt_iterator&);
+	reference operator*();
+	pointer operator->();
+};
+
+template < typename K, typename V >
+bool rbt_iterator<K, V>::operator==(const rbt_iterator<K, V> &iter)
+{
+	return cur == iter.cur;
+}
+
+template < typename K, typename V >
+bool rbt_iterator<K, V>::operator!=(const rbt_iterator<K, V> &iter)
+{
+	return cur != iter.cur;
+}
+
+template < typename K, typename V >
+typename rbt_iterator<K, V>::reference
+rbt_iterator<K, V>::operator*()
+{
+	return (*cur).data;
+}
+
+template < typename K, typename V >
+typename rbt_iterator<K, V>::pointer
+rbt_iterator<K, V>::operator->()
+{
+	return &(cur->data);
+}
+
+template < typename K, typename V >
+class red_black_tree {
+protected:
+	typedef rbt_node_base<K, V> _rbt_node;
+	typedef rbt_iterator<K, V> _rbt_iterator;
+public:
+	typedef K key_type;
+	typedef V mapped_type;
+	typedef pair<K, V> value_type;
+	typedef value_type *pointer;
+	typedef value_type *reference;
+	typedef _rbt_node rbt_node;
+	typedef _rbt_iterator iterator;
+	typedef void (*Function)(value_type);
+
+	red_black_tree()
+	{
+		_rbt = NULL;
+	}
+	template < typename input_iterator >
+	red_black_tree(input_iterator first, input_iterator last)
+	{
+		_rbt = NULL;
+		typename iterator_traits<input_iterator>::value_type x;
+		while(first != last) {
+			x = *first;
+			insert(x.first, x.second);
+			++first;
+		}
+	}
+	~red_black_tree();
+
+	void insert(key_type, mapped_type);
+	void erase(key_type);
+
+	bool empty()
+	{
+		return _rbt == NULL;
+	}
+	iterator find(key_type);
+	void traverse(Function);
+
+private:
+	rbt_node *rbt_alloc_node(key_type key, mapped_type mapped)
+	{
+		return new rbt_node(key, mapped);
+	}
+	void rbt_free_node(rbt_node *&pnode)
+	{
+		delete pnode;
+		pnode = NULL;
+	}
+
+	void left_rotate(rbt_node *&);
+	void right_rotate(rbt_node*&);
+	void double_lr_rotate(rbt_node *&);
+	void double_rl_rotate(rbt_node *&);
+	rbt_node *predecessor(rbt_node *);
+	rbt_node *successor(rbt_node *);
+
+	void rbt_insert_fixup(rbt_node *&);
+	void rbt_erase_fixup(rbt_node *&);
+
+	void rbt_destroy_node(rbt_node *&);
+	void rbt_traverse_node(rbt_node *, Function);
+
+	rbt_node *_rbt;
+};
+
+template < typename K, typename V >
+void red_black_tree<K, V>::rbt_destroy_node(rbt_node *&pnode)
+{
+	if(pnode) {
+		rbt_destroy_node(pnode->left);
+		rbt_destroy_node(pnode->right);
+		rbt_free_node(pnode);
+	}
+}
+
+template < typename K, typename V >
+red_black_tree<K, V>::~red_black_tree()
+{
+	if(_rbt) {
+		rbt_destroy_node(_rbt);
+	}
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::left_rotate(rbt_node *&pnode)
+{
+	rbt_node *rchild = pnode->right;
+	pnode->right = rchild->left;
+	if(pnode->right) {
+		pnode->right->parent = pnode;
+	}
+	rchild->parent = pnode->parent;
+	// following code can be replaced by last sentence "pnode = lchild"
+	/*if(pnode->parent == NULL) {
+		_rbt = rchild;
+	}
+	else if(pnode->parent->left == pnode) {
+		pnode->parent->left = rchild;
+	}
+	else {
+		pnode->parent->right = rchild;
+	}*/
+	rchild->left = pnode;
+	pnode->parent = rchild;
+	pnode = rchild;
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::right_rotate(rbt_node *&pnode)
+{
+	rbt_node *lchild = pnode->left;
+	pnode->left = lchild->right;
+	if(pnode->left) {
+		pnode->left->parent = pnode;
+	}
+	lchild->parent = pnode->parent;
+	// following code can be replaced by last sentence "pnode = lchild"
+	/*if(pnode->parent == NULL) {
+		_rbt = lchild;
+	}
+	else if(pnode->parent->left == pnode) {
+		pnode->parent->left = lchild;
+	}
+	else {
+		pnode->parent->right = lchild;
+	}*/
+	lchild->right = pnode;
+	pnode->parent = lchild;
+	pnode = lchild;
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::double_lr_rotate(rbt_node *&pnode)
+{
+	left_rotate(pnode->left);
+	right_rotate(pnode);
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::double_rl_rotate(rbt_node *&pnode)
+{
+	right_rotate(pnode->right);
+	left_rotate(pnode);
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::rbt_insert_fixup(rbt_node *&pnode)
+{
+	rbt_node *uncle = NULL;
+	while(pnode->parent && pnode->parent->color == RED) {
+		if(pnode->parent->parent == NULL) {
+			break;
+		}
+		if(pnode->parent->parent && pnode->parent == pnode->parent->parent->left) {
+			if(pnode->parent->parent->right == NULL) {
+				if(pnode == pnode->parent->right) {
+					pnode = pnode->parent;
+					left_rotate(pnode);
+					pnode = pnode->left;
+				}
+				pnode = pnode->parent->parent;
+				if(pnode == _rbt) {
+					right_rotate(_rbt);
+					_rbt->left->color = BLACK;
+					break;
+				}
+				else {
+					right_rotate(pnode);
+					pnode->left->color = BLACK;
+				}
+			}
+			else {
+				uncle = pnode->parent->parent->right;
+			    if(uncle->color == RED) {
+			    	pnode->parent->color = BLACK;
+				    uncle->color = BLACK;
+				    pnode->parent->parent->color = RED;
+				    pnode = pnode->parent->parent;
+			    }
+			    else {
+				    if(pnode == pnode->parent->right) {
+					     pnode = pnode->parent;
+					     left_rotate(pnode);
+				    }
+				    pnode->color = BLACK;
+				    pnode->parent->color = RED;
+				    right_rotate(pnode->parent);
+			    }
+			}
+		}
+		else if(pnode->parent->parent && pnode->parent == pnode->parent->parent->right) {
+			if(pnode->parent->parent->left == NULL) {
+				if(pnode == pnode->parent->left) {
+					pnode = pnode->parent;
+					right_rotate(pnode);
+					pnode = pnode->right;
+				}
+				pnode = pnode->parent->parent;
+				if(pnode == _rbt) {
+					left_rotate(_rbt);
+					_rbt->right->color = BLACK;
+					break;
+				}
+				else {
+					left_rotate(pnode);
+					pnode->right->color = BLACK;
+				}
+			}
+			else {
+				uncle = pnode->parent->parent->left;
+			    if(uncle->color == RED) {
+				    pnode->parent->color = BLACK;
+				    uncle->color = BLACK;
+				    pnode->parent->parent->color = RED;
+				    pnode = pnode->parent->parent;
+			    }
+			    else {
+				    if(pnode == pnode->parent->left) {
+					    pnode = pnode->parent;
+					    right_rotate(pnode);
+				    }
+				    pnode->color = BLACK;
+				    pnode->parent->color = RED;
+				    left_rotate(pnode->parent);
+			    }
+			}
+		}
+	}
+	_rbt->color = BLACK;
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::insert(key_type key, mapped_type mapped)
+{
+	// p is father of pnode
+	rbt_node *pnode = _rbt;
+	rbt_node *p = NULL;
+	while(pnode) {
+		p = pnode;
+		if(key < pnode->key()) {
+			pnode = pnode->left;
+		}
+		else {
+			pnode = pnode->right;
+		}
+	}
+	pnode = rbt_alloc_node(key, mapped);
+	pnode->parent = p;
+	if(p == NULL) {
+		_rbt = pnode;
+	}
+	else if(pnode->key() < p->key()) {
+		p->left = pnode;
+	}
+	else {
+		p->right = pnode;
+	}
+	rbt_insert_fixup(pnode);
+}
+
+template < typename K, typename V >
+typename red_black_tree<K, V>::rbt_node *
+red_black_tree<K, V>::predecessor(rbt_node *pnode)
+{
+	if(pnode == NULL) {
+		return NULL;
+	}
+
+	if(pnode->left) {
+		rbt_node *qnode = pnode->left;
+		while(qnode->right) {
+			qnode = qnode->right;
+		}
+		return qnode;
+	}
+	else {
+		while(pnode->parent && pnode == pnode->parent->left) {
+			pnode = pnode->parent;
+		}
+		return pnode->parent;
+	}
+	return NULL;
+}
+
+template < typename K, typename V >
+typename red_black_tree<K, V>::rbt_node *
+red_black_tree<K, V>::successor(rbt_node *pnode)
+{
+	if(pnode == NULL) {
+		return NULL;
+	}
+
+	if(pnode->right) {
+		rbt_node *qnode = pnode->right;
+		while(qnode->left) {
+			qnode = qnode->left;
+		}
+		return qnode;
+	}
+	else {
+		while(pnode->parent && pnode == pnode->parent->right) {
+			pnode = pnode->parent;
+		}
+		return pnode->parent;
+	}
+	return NULL;
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::erase(key_type key)
+{
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::rbt_traverse_node(rbt_node *pnode, Function func)
+{
+	if(pnode) {
+		rbt_traverse_node(pnode->left, func);
+		func(pnode->data);
+		rbt_traverse_node(pnode->right, func);
+	}
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::traverse(Function func)
+{
+	if(_rbt) {
+		rbt_traverse_node(_rbt, func);
+	}
+}
+
+void print(pair<int, int> p)
+{
+	cout << p.first << " " << p.second << endl;
+}
+
+int main()
+{
+	vector<pair<int, int> > vec;
+	vec.push_back(make_pair(5, 5));
+	vec.push_back(make_pair(4, 4));
+	vec.push_back(make_pair(3, 3));
+	vec.push_back(make_pair(8, 8));
+	vec.push_back(make_pair(7, 7));
+	//vec.push_back(make_pair(9, 9));
+
+	red_black_tree<int, int> rbt(vec.begin(), vec.end());
+	rbt.traverse(print);
+	
+	return 0;
+}
