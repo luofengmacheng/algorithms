@@ -4,31 +4,40 @@
  * title:	Red Black Tree
  * language:	C++
  * info:	2014/4/8 insert
- * 			2014/4/9 predecessor, successor
- *			2014/4/10 erase
- *			2014/4/11 test this program
+ * 		2014/4/9 predecessor, successor
+ *		2014/4/11 erase
+ *		2014/4/13 test this program
  * problem:	
  * bug 1:   在对树进行调整时（rbt_insert_fixup），由于调整时可能会涉及到根节点，但是修改过程中并没有判断根节点，
  *          因此，可能会出现根节点还是指向原来所指的节点，但是树的根已经改变了，导致遍历整个树时节点丢失和内存泄漏。
- * 			            4(BLACK)
- * 		               / \
- *             (BLACK)3   5(BLACK)
- *                         \
- *                          8(RED)
- *                         /
- *                        7(RED)
+ *          比如：              5(BLACK)
+ * 		               /
+ *                       (RED)4
+ *                           /
+ *                     (RED)3
+ *          当插入5，4，3之后，树的结构如上图，此时，pnode指向节点3，而且需要对pnode->parent->parent进行右单旋转操作，但是如果进行这样的操作之后：
+ *          pnode = pnode->parent->parent;
+ *          right_rotate(pnode);
+ *          pnode所指向的树确实变成了希望的那样，但是，此时指向根节点的指针_rbt还是指向节点5，但是，实际应该指向4，
+ *          因此，这里进行旋转操作时应该判断pnode->parent->parent是否等于_rbt，然后对_rbt进行相应的修改。
+ *          或者如SGI STL中在根节点的上面再设置一个节点，那么此时就不需要判断了，但是这样依旧会引发bug 2。
  *
  * bug 2:   在对某个子树进行旋转时（left_rotate or right_rotate or double rotate），由于是用临时节点来依次往上进行调整，
  *          因此，在旋转时使用的临时节点进行旋转，但是，并没有修改当前子树根节点的父节点的子树指针，因此，这棵树有可能已经不能如预期一样了。
- * 			比如：
- *			            4(BLACK)
+ *          比如：
+ *			        4(BLACK)
  * 		               / \
- *             (BLACK)3   5(BLACK)
- *                         \
- *                          8(RED)
- *                         /
- *                        7(RED)
- * 			对于上面的树，当前pnode指向节点7，那么就需要进行调整，而且先要进行
+ *                     (BLACK)3   5(BLACK)
+ *                                 \
+ *                                  8(RED)
+ *                                 /
+ *                                7(RED)
+ *          对于上面的树，当前pnode指向节点7，那么就需要进行调整，而且先要对节点8进行右单旋转操作：
+ *          pnode = pnode->parent;
+ *          right_rotate(pnode);
+ *          此时，pnode指向节点7，但是，从当前的right_rotate代码中可以看到，它修改了7的父节点的指针，没有修改7的父节点的子指针
+ *          因此，这里相当就形成了一个环路，节点7的父指针指向节点5。
+ *          这里的根本问题就在旋转函数，旋转函数在旋转的时候，需要改变父节点的子指针。
  */
 
 #include <iostream>
@@ -203,8 +212,9 @@ void red_black_tree<K, V>::left_rotate(rbt_node *&pnode)
 		pnode->right->parent = pnode;
 	}
 	rchild->parent = pnode->parent;
-	// following code can be replaced by last sentence "pnode = lchild"
-	/*if(pnode->parent == NULL) {
+	// following code cannot be replaced by last sentence "pnode = lchild", look bug 2
+        //之前没有下面这个if
+	if(pnode->parent == NULL) {
 		_rbt = rchild;
 	}
 	else if(pnode->parent->left == pnode) {
@@ -212,7 +222,7 @@ void red_black_tree<K, V>::left_rotate(rbt_node *&pnode)
 	}
 	else {
 		pnode->parent->right = rchild;
-	}*/
+	}
 	rchild->left = pnode;
 	pnode->parent = rchild;
 	pnode = rchild;
@@ -227,16 +237,16 @@ void red_black_tree<K, V>::right_rotate(rbt_node *&pnode)
 		pnode->left->parent = pnode;
 	}
 	lchild->parent = pnode->parent;
-	// following code can be replaced by last sentence "pnode = lchild"
-	/*if(pnode->parent == NULL) {
-		_rbt = lchild;
-	}
-	else if(pnode->parent->left == pnode) {
+	// following code cannot be replaced by last sentence "pnode = lchild", look bug 2
+        // 之前没有下面这个if
+        if(pnode->parent) {
+            if(pnode->parent->left == pnode) {
 		pnode->parent->left = lchild;
-	}
-	else {
+	    }
+	    else {
 		pnode->parent->right = lchild;
-	}*/
+	    }
+        }
 	lchild->right = pnode;
 	pnode->parent = lchild;
 	pnode = lchild;
@@ -455,7 +465,7 @@ int main()
 	vec.push_back(make_pair(3, 3));
 	vec.push_back(make_pair(8, 8));
 	vec.push_back(make_pair(7, 7));
-	//vec.push_back(make_pair(9, 9));
+	vec.push_back(make_pair(9, 9));
 
 	red_black_tree<int, int> rbt(vec.begin(), vec.end());
 	rbt.traverse(print);
