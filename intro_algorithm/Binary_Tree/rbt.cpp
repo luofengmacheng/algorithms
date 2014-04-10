@@ -50,6 +50,10 @@ enum COLOR {
 	RED, BLACK
 };
 
+//红黑树的前向声明，主要是为了将红黑树设定为迭代器的友元，使其可以访问迭代器的私有成员
+template < typename K, typename V >
+class red_black_tree;
+
 template < typename K, typename V >
 struct rbt_node_base {
 	pair<K, V> data;
@@ -73,14 +77,19 @@ struct rbt_node_base {
 };
 
 template < typename K, typename V >
-struct rbt_iterator {
+class rbt_iterator {
 	rbt_node_base<K, V> *cur;
+	typedef rbt_node_base<K, V> rbt_node;
+	rbt_node *predecessor(rbt_node *);
+	rbt_node *successor(rbt_node *);
 
+public:
+	friend red_black_tree<K, V>;
 	typedef pair<K, V> value_type;
 	typedef value_type *pointer;
 	typedef value_type &reference;
-	//rbt_iterator& operator++();
-	//const rbt_iterator operator++(int);
+	rbt_iterator& operator++();
+	const rbt_iterator operator++(int);
 	//rbt_iterator& operator--();
 	//const rbt_iterator operator--(int);
 
@@ -89,6 +98,72 @@ struct rbt_iterator {
 	reference operator*();
 	pointer operator->();
 };
+
+template < typename K, typename V >
+typename rbt_iterator<K, V>::rbt_node *
+rbt_iterator<K, V>::predecessor(rbt_node *pnode)
+{
+	if(pnode == NULL) {
+		return NULL;
+	}
+
+	if(pnode->left) {
+		rbt_node *qnode = pnode->left;
+		while(qnode->right) {
+			qnode = qnode->right;
+		}
+		return qnode;
+	}
+	else {
+		while(pnode->parent && pnode == pnode->parent->left) {
+			pnode = pnode->parent;
+		}
+		return pnode->parent;
+	}
+	return NULL;
+}
+
+template < typename K, typename V >
+typename rbt_iterator<K, V>::rbt_node *
+rbt_iterator<K, V>::successor(rbt_node *pnode)
+{
+	if(pnode == NULL) {
+		return NULL;
+	}
+
+	if(pnode->right) {
+		rbt_node *qnode = pnode->right;
+		while(qnode->left) {
+			qnode = qnode->left;
+		}
+		return qnode;
+	}
+	else {
+		while(pnode->parent && pnode == pnode->parent->right) {
+			pnode = pnode->parent;
+		}
+		return pnode->parent;
+	}
+	return NULL;
+}
+
+
+template < typename K, typename V >
+rbt_iterator<K, V>& rbt_iterator<K, V>::operator++()
+{
+	cur = successor(cur);
+
+	return *this;
+}
+
+template < typename K, typename V >
+const rbt_iterator<K, V> rbt_iterator<K, V>::operator++(int)
+{
+	rbt_iterator iter(*this);
+	this->operator++();
+
+	return iter;
+}
 
 template < typename K, typename V >
 bool rbt_iterator<K, V>::operator==(const rbt_iterator<K, V> &iter)
@@ -157,6 +232,8 @@ public:
 	}
 	iterator find(key_type);
 	void traverse(Function);
+	iterator begin();
+	iterator end();
 
 private:
 	rbt_node *rbt_alloc_node(key_type key, mapped_type mapped)
@@ -173,8 +250,6 @@ private:
 	void right_rotate(rbt_node*&);
 	void double_lr_rotate(rbt_node *&);
 	void double_rl_rotate(rbt_node *&);
-	rbt_node *predecessor(rbt_node *);
-	rbt_node *successor(rbt_node *);
 
 	void rbt_insert_fixup(rbt_node *&);
 	void rbt_erase_fixup(rbt_node *&);
@@ -214,14 +289,13 @@ void red_black_tree<K, V>::left_rotate(rbt_node *&pnode)
 	rchild->parent = pnode->parent;
 	// following code cannot be replaced by last sentence "pnode = lchild", look bug 2
         //之前没有下面这个if
-	if(pnode->parent == NULL) {
-		_rbt = rchild;
-	}
-	else if(pnode->parent->left == pnode) {
-		pnode->parent->left = rchild;
-	}
-	else {
-		pnode->parent->right = rchild;
+	if(pnode->parent) {
+		if(pnode->parent->left == pnode) {
+			pnode->parent->left = rchild;
+		}
+		else {
+			pnode->parent->right = rchild;
+		}
 	}
 	rchild->left = pnode;
 	pnode->parent = rchild;
@@ -239,14 +313,14 @@ void red_black_tree<K, V>::right_rotate(rbt_node *&pnode)
 	lchild->parent = pnode->parent;
 	// following code cannot be replaced by last sentence "pnode = lchild", look bug 2
         // 之前没有下面这个if
-        if(pnode->parent) {
-            if(pnode->parent->left == pnode) {
-		pnode->parent->left = lchild;
-	    }
-	    else {
-		pnode->parent->right = lchild;
-	    }
-        }
+	if(pnode->parent) {
+		if(pnode->parent->left == pnode) {
+			pnode->parent->left = lchild;
+		}
+		else {
+			pnode->parent->right = lchild;
+		}
+	}
 	lchild->right = pnode;
 	pnode->parent = lchild;
 	pnode = lchild;
@@ -381,53 +455,6 @@ void red_black_tree<K, V>::insert(key_type key, mapped_type mapped)
 	rbt_insert_fixup(pnode);
 }
 
-template < typename K, typename V >
-typename red_black_tree<K, V>::rbt_node *
-red_black_tree<K, V>::predecessor(rbt_node *pnode)
-{
-	if(pnode == NULL) {
-		return NULL;
-	}
-
-	if(pnode->left) {
-		rbt_node *qnode = pnode->left;
-		while(qnode->right) {
-			qnode = qnode->right;
-		}
-		return qnode;
-	}
-	else {
-		while(pnode->parent && pnode == pnode->parent->left) {
-			pnode = pnode->parent;
-		}
-		return pnode->parent;
-	}
-	return NULL;
-}
-
-template < typename K, typename V >
-typename red_black_tree<K, V>::rbt_node *
-red_black_tree<K, V>::successor(rbt_node *pnode)
-{
-	if(pnode == NULL) {
-		return NULL;
-	}
-
-	if(pnode->right) {
-		rbt_node *qnode = pnode->right;
-		while(qnode->left) {
-			qnode = qnode->left;
-		}
-		return qnode;
-	}
-	else {
-		while(pnode->parent && pnode == pnode->parent->right) {
-			pnode = pnode->parent;
-		}
-		return pnode->parent;
-	}
-	return NULL;
-}
 
 template < typename K, typename V >
 void red_black_tree<K, V>::erase(key_type key)
@@ -452,6 +479,32 @@ void red_black_tree<K, V>::traverse(Function func)
 	}
 }
 
+template < typename K, typename V >
+typename red_black_tree<K, V>::iterator
+red_black_tree<K, V>::begin()
+{
+	iterator iter;
+	if(_rbt == NULL) {
+		iter.cur = NULL;
+		return iter;
+	}
+	rbt_node *pnode = _rbt;
+	while(pnode->left) {
+		pnode = pnode->left;
+	}
+	iter.cur = pnode;
+	return iter;
+}
+
+template < typename K, typename V >
+typename red_black_tree<K, V>::iterator
+red_black_tree<K, V>::end()
+{
+	iterator iter;
+	iter.cur = NULL;
+	return iter;
+}
+
 void print(pair<int, int> p)
 {
 	cout << p.first << " " << p.second << endl;
@@ -468,7 +521,17 @@ int main()
 	vec.push_back(make_pair(9, 9));
 
 	red_black_tree<int, int> rbt(vec.begin(), vec.end());
+
+	// 下面是访问红黑树的两种方式:
+	// 一种是使用红黑树提供的traverse函数，它的参数是函数指针或者函数对象
+	// 函数指针或者函数对象的参数是pair
 	rbt.traverse(print);
+
+	// 另外一种是使用它的迭代器
+	for(red_black_tree<int, int>::iterator iter = rbt.begin();
+		                               iter != rbt.end(); ++iter) {
+		cout << iter->first << " " << iter->second << endl;
+	}
 	
 	return 0;
 }
