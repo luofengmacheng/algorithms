@@ -1,11 +1,11 @@
 /*
  * author:	luo feng
- * date:	2014/4/2 - 2014/4/
+ * date:	2014/4/2 - 2014/4/14
  * title:	Red Black Tree
  * language:	C++
  * info:	2014/4/8 insert
  * 		2014/4/9 predecessor, successor
- *		2014/4/11 erase
+ *		2014/4/11 erase(not yet)
  *		2014/4/13 test this program
  * problem:	
  * bug 1:   在对树进行调整时（rbt_insert_fixup），由于调整时可能会涉及到根节点，但是修改过程中并没有判断根节点，
@@ -37,7 +37,10 @@
  *          right_rotate(pnode);
  *          此时，pnode指向节点7，但是，从当前的right_rotate代码中可以看到，它修改了7的父节点的指针，没有修改7的父节点的子指针
  *          因此，这里相当就形成了一个环路，节点7的父指针指向节点5。
- *          这里的根本问题就在旋转函数，旋转函数在旋转的时候，需要改变父节点的子指针。
+ *          这里的根本问题就在旋转函数，旋转函数在旋转的时候，需要改变父节点的子指针，之前使用的旋转函数拷贝的avl的代码，
+ *          但是，那个程序中没有修改父节点的子指针，使用的是递归，没有该问题，这里是从下往上走，因此，会造成该问题。
+ *
+ * 声明：   本程序没有进行严格的测试，因此，不能保证所有的测试用例都能够正常运行。
  */
 
 #include <iostream>
@@ -77,38 +80,14 @@ struct rbt_node_base {
 };
 
 template < typename K, typename V >
-class rbt_iterator {
-	rbt_node_base<K, V> *cur;
-	typedef rbt_node_base<K, V> rbt_node;
-	rbt_node *predecessor(rbt_node *);
-	rbt_node *successor(rbt_node *);
-
-public:
-	friend red_black_tree<K, V>;
-	typedef pair<K, V> value_type;
-	typedef value_type *pointer;
-	typedef value_type &reference;
-	rbt_iterator& operator++();
-	const rbt_iterator operator++(int);
-	//rbt_iterator& operator--();
-	//const rbt_iterator operator--(int);
-
-	bool operator==(const rbt_iterator&);
-	bool operator!=(const rbt_iterator&);
-	reference operator*();
-	pointer operator->();
-};
-
-template < typename K, typename V >
-typename rbt_iterator<K, V>::rbt_node *
-rbt_iterator<K, V>::predecessor(rbt_node *pnode)
+static rbt_node_base<K, V> *predecessor(rbt_node_base<K, V> *pnode)
 {
 	if(pnode == NULL) {
 		return NULL;
 	}
 
 	if(pnode->left) {
-		rbt_node *qnode = pnode->left;
+		rbt_node_base<K, V> *qnode = pnode->left;
 		while(qnode->right) {
 			qnode = qnode->right;
 		}
@@ -124,15 +103,14 @@ rbt_iterator<K, V>::predecessor(rbt_node *pnode)
 }
 
 template < typename K, typename V >
-typename rbt_iterator<K, V>::rbt_node *
-rbt_iterator<K, V>::successor(rbt_node *pnode)
+rbt_node_base<K, V> *successor(rbt_node_base<K, V> *pnode)
 {
 	if(pnode == NULL) {
 		return NULL;
 	}
 
 	if(pnode->right) {
-		rbt_node *qnode = pnode->right;
+		rbt_node_base<K, V> *qnode = pnode->right;
 		while(qnode->left) {
 			qnode = qnode->left;
 		}
@@ -147,6 +125,26 @@ rbt_iterator<K, V>::successor(rbt_node *pnode)
 	return NULL;
 }
 
+template < typename K, typename V >
+class rbt_iterator {
+	rbt_node_base<K, V> *cur;
+	typedef rbt_node_base<K, V> rbt_node;
+
+public:
+	friend red_black_tree<K, V>;
+	typedef pair<K, V> value_type;
+	typedef value_type *pointer;
+	typedef value_type &reference;
+	rbt_iterator& operator++();
+	const rbt_iterator operator++(int);
+	rbt_iterator& operator--();
+	const rbt_iterator operator--(int);
+
+	bool operator==(const rbt_iterator&);
+	bool operator!=(const rbt_iterator&);
+	reference operator*();
+	pointer operator->();
+};
 
 template < typename K, typename V >
 rbt_iterator<K, V>& rbt_iterator<K, V>::operator++()
@@ -161,6 +159,23 @@ const rbt_iterator<K, V> rbt_iterator<K, V>::operator++(int)
 {
 	rbt_iterator iter(*this);
 	this->operator++();
+
+	return iter;
+}
+
+template < typename K, typename V >
+rbt_iterator<K, V>& rbt_iterator<K, V>::operator--()
+{
+	cur = predecessor(cur);
+
+	return *this;
+}
+
+template < typename K, typename V >
+const rbt_iterator<K, V> rbt_iterator<K, V>::operator--(int)
+{
+	rbt_iterator iter(*this);
+	this->operator--();
 
 	return iter;
 }
@@ -253,6 +268,7 @@ private:
 
 	void rbt_insert_fixup(rbt_node *&);
 	void rbt_erase_fixup(rbt_node *&);
+	void rbt_erase_node(rbt_node *&);
 
 	void rbt_destroy_node(rbt_node *&);
 	void rbt_traverse_node(rbt_node *, Function);
@@ -344,10 +360,7 @@ template < typename K, typename V >
 void red_black_tree<K, V>::rbt_insert_fixup(rbt_node *&pnode)
 {
 	rbt_node *uncle = NULL;
-	while(pnode->parent && pnode->parent->color == RED) {
-		if(pnode->parent->parent == NULL) {
-			break;
-		}
+	while(pnode->parent && pnode->parent->parent && pnode->parent->color == RED) {
 		if(pnode->parent->parent && pnode->parent == pnode->parent->parent->left) {
 			if(pnode->parent->parent->right == NULL) {
 				if(pnode == pnode->parent->right) {
@@ -381,7 +394,14 @@ void red_black_tree<K, V>::rbt_insert_fixup(rbt_node *&pnode)
 				    }
 				    pnode->color = BLACK;
 				    pnode->parent->color = RED;
-				    right_rotate(pnode->parent);
+				    pnode = pnode->parent;
+				    if(pnode == _rbt) {
+				    	right_rotate(_rbt);
+				    	break;
+				    }
+				    else {
+				    	right_rotate(pnode);
+				    }
 			    }
 			}
 		}
@@ -418,7 +438,13 @@ void red_black_tree<K, V>::rbt_insert_fixup(rbt_node *&pnode)
 				    }
 				    pnode->color = BLACK;
 				    pnode->parent->color = RED;
-				    left_rotate(pnode->parent);
+				    pnode = pnode->parent;
+				    if(pnode == _rbt) {
+				    	left_rotate(_rbt);
+				    }
+				    else {
+				    	left_rotate(pnode);
+				    }
 			    }
 			}
 		}
@@ -455,10 +481,71 @@ void red_black_tree<K, V>::insert(key_type key, mapped_type mapped)
 	rbt_insert_fixup(pnode);
 }
 
+template < typename K, typename V >
+void red_black_tree<K, V>::rbt_erase_fixup(rbt_node *&pnode)
+{
+}
+
+template < typename K, typename V >
+void red_black_tree<K, V>::rbt_erase_node(rbt_node *&pnode)
+{
+	// qnode is the node which will be erased
+	rbt_node *qnode = NULL, *rnode = NULL;
+
+	// if pnode has less than two children, pnode will be erased
+	if(pnode->left == NULL || pnode->right == NULL) {
+		qnode = pnode;
+	}
+	else {
+		// if pnode has two children, pnode's successor will be erased
+		qnode = successor(pnode);
+	}
+	// rnode will replace qnode
+	if(qnode->left) {
+		rnode = qnode->left;
+	}
+	else {
+		rnode = qnode->right;
+	}
+	// the following two operations will make rnode to the child of qnode's parent
+	rnode->parent = qnode->parent;
+	if(qnode->parent == NULL) {
+		_rbt = rnode;
+	}
+	else if(qnode == qnode->parent->left) {
+		qnode->parent->left = rnode;
+	}
+	else {
+		qnode->parent->right = rnode;
+	}
+	if(qnode != pnode) {
+		// pnode has two children
+		pnode->data = qnode->data;
+	}
+	if(qnode->color == BLACK) {
+		rbt_free_node(qnode);
+		rbt_erase_fixup(rnode);
+	}
+}
 
 template < typename K, typename V >
 void red_black_tree<K, V>::erase(key_type key)
 {
+	rbt_node *pnode = _rbt;
+	while(pnode) {
+		if(key < pnode->key()) {
+			pnode = pnode->left;
+		}
+		else if(key > pnode->key()) {
+			pnode = pnode->right;
+		}
+		else {
+			break;
+		}
+	}
+	if(key == pnode->key()) {
+		rbt_erase_node(pnode);
+	}
 }
 
 template < typename K, typename V >
@@ -496,6 +583,7 @@ red_black_tree<K, V>::begin()
 	return iter;
 }
 
+// 由于最右节点的下一个节点就是空节点(参看successor)，因此可以直接将end迭代器置为0
 template < typename K, typename V >
 typename red_black_tree<K, V>::iterator
 red_black_tree<K, V>::end()
@@ -514,10 +602,10 @@ int main()
 {
 	vector<pair<int, int> > vec;
 	vec.push_back(make_pair(5, 5));
-	vec.push_back(make_pair(4, 4));
-	vec.push_back(make_pair(3, 3));
-	vec.push_back(make_pair(8, 8));
+	vec.push_back(make_pair(2, 2));
 	vec.push_back(make_pair(7, 7));
+	vec.push_back(make_pair(3, 3));
+	//vec.push_back(make_pair(7, 7));
 	vec.push_back(make_pair(9, 9));
 
 	red_black_tree<int, int> rbt(vec.begin(), vec.end());
@@ -525,7 +613,7 @@ int main()
 	// 下面是访问红黑树的两种方式:
 	// 一种是使用红黑树提供的traverse函数，它的参数是函数指针或者函数对象
 	// 函数指针或者函数对象的参数是pair
-	rbt.traverse(print);
+	//rbt.traverse(print);
 
 	// 另外一种是使用它的迭代器
 	for(red_black_tree<int, int>::iterator iter = rbt.begin();
