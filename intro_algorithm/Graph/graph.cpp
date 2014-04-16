@@ -4,6 +4,7 @@
  * source:	Introduction to Algorithm
  * title:	BFS(graph)
  * info:	算法导论中图部分的广度优先搜索。主要的训练项目是：图的数据结构，广度优先搜索，广度优先搜索树。
+ *		深度优先搜索。主要的训练项目是：深度优先搜索。
  */
 
 #include <iostream>
@@ -40,6 +41,7 @@ public:
 	void show();
 	void traverse_bfs(int);
 	void bfs_path(int, int);
+	void traverse_dfs(int);
 };
 
 // 图的构造函数，vetex_cnt是图的顶点个数，end - beg是边的个数，
@@ -136,6 +138,11 @@ void graph::traverse_bfs(int start)
 		color[node] = BLACK;
 		que.pop();
 	}
+}
+
+void graph::traverse_dfs(int start)
+{
+	
 }
 
 // 经过广度优先搜索遍历后，所遍历的路径形成了一棵广度优先搜索树，bfs_path()打印广度优先搜索树中从start到end的路径以及距离
