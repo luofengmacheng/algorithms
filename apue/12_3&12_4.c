@@ -3,7 +3,7 @@
  * date:	2014/4/16
  * source:	APUE
  * title:	重入
- * language:	C++
+ * language:	C
  * 这里实现了一个getenv函数的非可重入版本和可重入版本。用mutex来保护environ只能被一个getenv函数使用，其它使用getenv的函数都会被阻塞。
  */
 

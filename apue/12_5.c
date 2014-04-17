@@ -3,7 +3,7 @@
  * date:	2014/4/16
  * source:	APUE
  * title:	线程私有数据
- * language:	C++
+ * language:	C
  * 对于线程私有数据需要了解的是：
  * 1 使用场合：有时线程需要拥有自己的数据，特别是对于不可重入函数来说，它们有时会使用全局变量，然而，当多个线程同时访问全局变量时会出现问题，因此，有必要提供一种保存变量的一个副本，使得一个线程的改变不影响另一个线程。
  * 2 如何使用： int pthread_key_create(pthread_key_t *keyp, void (*destructor)(void *)); 创建一个键
