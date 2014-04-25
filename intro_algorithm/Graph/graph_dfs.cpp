@@ -3,18 +3,18 @@
  * date:	2014/4/21
  * source:	Introduction to Algorithm
  * title:	DFS(graph)
- * info:	算法导论中图部分的深度优先搜索。主要的训练项目是：广度优先搜索。
+ * info:	算法导论中图部分的深度优先搜索。主要的训练项目是：图的广度优先搜索的递归方式和非递归方式。
  */
 
 #include <iostream>
 #include <climits>
 #include <vector>
-#include <queue>
+#include <stack>
 #include <iterator>
 using namespace std;
 
 enum COLOR {
-	WHITE, GREY, BLACK
+	WHITE, GRAY, BLACK
 };
 
 struct _gnode {
@@ -41,6 +41,7 @@ public:
 	~graph();
 	void show();
 	void traverse_dfs();
+	void traverse_with_stack();
 	//void bfs_path(int, int);
 };
 
@@ -111,8 +112,9 @@ void graph::show()
 
 void graph::dfs_visit(int start)
 {
-	color[start] = GREY;
+	color[start] = GRAY;
 	cout << "(" << start;
+	//cout << start << endl;
 
 	_gnode *pg = vetex[start].pg;
 	int vet = 0;
@@ -128,7 +130,7 @@ void graph::dfs_visit(int start)
 	cout << start << ")";
 }
 
-// 
+// 图的递归访问
 void graph::traverse_dfs()
 {
 	_gnode *pg = NULL;
@@ -139,6 +141,41 @@ void graph::traverse_dfs()
 		if(color[i] == WHITE) {
 			//cout << i << endl;
 			dfs_visit(i);
+		}
+	}
+}
+
+// 图的非递归遍历（使用栈）
+void graph::traverse_with_stack()
+{
+	_gnode *pg = NULL;
+	_gnode *tmp = NULL;
+	int i = 0;
+	stack<int> sta;
+
+	for(i = 0; i < size; ++i) {
+		pg = vetex[i].pg;
+		if(color[i] == WHITE) {
+			color[i] = GRAY;
+			//cout << i << endl;
+			cout << "(" << i;
+			sta.push(i); // root of subtree
+			while(!sta.empty()) {
+				tmp = vetex[sta.top()].pg;
+				while(tmp && color[tmp->edge] != WHITE) {
+					tmp = tmp->next;
+				}
+				if(tmp == NULL) {
+					color[sta.top()] = BLACK;
+					cout << sta.top() << ")";
+					sta.pop();
+				}
+				else {
+					cout << "(" << tmp->edge;
+					color[tmp->edge] = GRAY;
+					sta.push(tmp->edge);
+				}
+			}
 		}
 	}
 }
@@ -169,6 +206,10 @@ int main(int argc, char const *argv[])
 	graph gra(8, vec.begin(), vec.end());
 	gra.show();
 	gra.traverse_dfs();
+	cout << endl;
+	graph gra2(8, vec.begin(), vec.end());
+	gra2.show();
+	gra2.traverse_with_stack();
 	cout << endl;
 
 	return 0;
