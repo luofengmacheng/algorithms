@@ -3,12 +3,13 @@
  * date:	2014/4/21
  * source:	Introduction to Algorithm
  * title:	DFS(graph)
- * info:	算法导论中图部分的深度优先搜索。主要的训练项目是：图的广度优先搜索的递归方式和非递归方式。
+ * info:	算法导论中图部分的深度优先搜索。主要的训练项目是：图的广度优先搜索的递归方式和非递归方式、拓扑排序。
  */
 
 #include <iostream>
 #include <climits>
 #include <vector>
+#include <list>
 #include <stack>
 #include <iterator>
 using namespace std;
@@ -34,6 +35,7 @@ class graph {
 	int *parent;
 	int *distance;
 	size_t size;
+	list<int> top_sort;
 
 	void dfs_visit(int);
 public:
@@ -42,6 +44,7 @@ public:
 	void show();
 	void traverse_dfs();
 	void traverse_with_stack();
+	void topological_sort();
 	//void bfs_path(int, int);
 };
 
@@ -125,18 +128,16 @@ void graph::dfs_visit(int start)
 			parent[vet] = start;
 			dfs_visit(vet);
 		}
-		else {
-			cout << start << " -> " << vet << " is Backward edge" << endl;
-		}
-		/*else if(color[vet] == GRAY) {
+		else if(color[vet] == GRAY) {
 			cout << start << " -> " << vet << " is Backward edge" << endl;
 		}
 		else if(color[vet] == BLACK) {
 			cout << start << " -> " << vet << " is Forward edge or Cross edge" << endl;
-		}*/
+		}
 		pg = pg->next;
 	}
 	color[start] = BLACK;
+	top_sort.push_front(start);
 	//cout << start << ")";
 }
 
@@ -153,6 +154,15 @@ void graph::traverse_dfs()
 			dfs_visit(i);
 		}
 	}
+}
+
+void graph::topological_sort()
+{
+	for(list<int>::iterator iter = top_sort.begin();
+		                    iter != top_sort.end(); ++iter) {
+		cout << *iter << " ";
+	}
+	cout << endl;
 }
 
 // 图的非递归遍历（使用栈）
@@ -197,7 +207,7 @@ void graph::traverse_with_stack()
 int main(int argc, char const *argv[])
 {
 	vector<pair<int, int> > vec;
-	vec.push_back(make_pair(0, 1));
+	/*vec.push_back(make_pair(0, 1));
 	vec.push_back(make_pair(0, 4));
 	vec.push_back(make_pair(1, 5));
 	vec.push_back(make_pair(5, 2));
@@ -216,14 +226,24 @@ int main(int argc, char const *argv[])
 	vec.push_back(make_pair(3, 2));
 	vec.push_back(make_pair(6, 3));
 	vec.push_back(make_pair(7, 3));
-	vec.push_back(make_pair(7, 6));
+	vec.push_back(make_pair(7, 6));*/
+	vec.push_back(make_pair(0, 1));
+	vec.push_back(make_pair(0, 7));
+	vec.push_back(make_pair(1, 2));
+	vec.push_back(make_pair(1, 7));
+	vec.push_back(make_pair(2, 5));
+	vec.push_back(make_pair(3, 2));
+	vec.push_back(make_pair(3, 4));
+	vec.push_back(make_pair(4, 5));
+	vec.push_back(make_pair(6, 7));
 	graph gra(8, vec.begin(), vec.end());
 	gra.show();
 	gra.traverse_dfs();
 	cout << endl;
-	graph gra2(8, vec.begin(), vec.end());
+	gra.topological_sort();
+	/*graph gra2(8, vec.begin(), vec.end());
 	gra2.show();
-	gra2.traverse_with_stack();
+	gra2.traverse_with_stack();*/
 	cout << endl;
 
 	return 0;
