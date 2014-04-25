@@ -113,7 +113,7 @@ void graph::show()
 void graph::dfs_visit(int start)
 {
 	color[start] = GRAY;
-	cout << "(" << start;
+	//cout << "(" << start;
 	//cout << start << endl;
 
 	_gnode *pg = vetex[start].pg;
@@ -121,13 +121,23 @@ void graph::dfs_visit(int start)
 	while(pg != NULL) {
 		vet = pg->edge;
 		if(color[vet] == WHITE) {
+			cout << start << " -> " << vet << " is tree edge" << endl;
 			parent[vet] = start;
 			dfs_visit(vet);
 		}
+		else {
+			cout << start << " -> " << vet << " is Backward edge" << endl;
+		}
+		/*else if(color[vet] == GRAY) {
+			cout << start << " -> " << vet << " is Backward edge" << endl;
+		}
+		else if(color[vet] == BLACK) {
+			cout << start << " -> " << vet << " is Forward edge or Cross edge" << endl;
+		}*/
 		pg = pg->next;
 	}
 	color[start] = BLACK;
-	cout << start << ")";
+	//cout << start << ")";
 }
 
 // 图的递归访问
@@ -146,6 +156,8 @@ void graph::traverse_dfs()
 }
 
 // 图的非递归遍历（使用栈）
+// 发现使用栈来模拟递归时，不好判断某条边是否是第一次访问，此时可以使用multiset来保存已经访问的边。
+// 因为判断某条边的类型时，是以该条边第一次访问时，顶点的颜色来判断该条边的类型。
 void graph::traverse_with_stack()
 {
 	_gnode *pg = NULL;
@@ -158,20 +170,22 @@ void graph::traverse_with_stack()
 		if(color[i] == WHITE) {
 			color[i] = GRAY;
 			//cout << i << endl;
-			cout << "(" << i;
+			//cout << "(" << i;
 			sta.push(i); // root of subtree
 			while(!sta.empty()) {
 				tmp = vetex[sta.top()].pg;
 				while(tmp && color[tmp->edge] != WHITE) {
+					cout << sta.top() << " -> " << tmp->edge << " is Backward edge" << endl;
 					tmp = tmp->next;
 				}
 				if(tmp == NULL) {
 					color[sta.top()] = BLACK;
-					cout << sta.top() << ")";
+					//cout << sta.top() << ")";
 					sta.pop();
 				}
 				else {
-					cout << "(" << tmp->edge;
+					//cout << "(" << tmp->edge;
+					cout << sta.top() << " -> " << tmp->edge << " is tree edge" << endl;
 					color[tmp->edge] = GRAY;
 					sta.push(tmp->edge);
 				}
