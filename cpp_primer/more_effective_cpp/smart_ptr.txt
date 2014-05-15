@@ -1,0 +1,116 @@
+智能指针
+智能指针的设计意图：C++没有垃圾回收机制，所有的动态内存释放全部由程序员负责，如果程序员没有释放内存，就会造成内存泄漏，这是C++ BUG的一大来源。为了管理动态内存，引入了智能指针，它是一种行为类似指针的类，但是能够管理自己负责的内存区域，当对象离开作用域时能够释放内存，防止内存泄漏。
+
+现在常用的C++标准是C++98，其中只定义了一种智能指针auto_ptr。
+
+boost中早就引入了其它类型的智能指针：scoped_ptr,scoped_array,shared_ptr,shared_array,weak_ptr。
+而新的C++11也引入了部分上述类型的智能指针：shared_ptr,weak_ptr,unique_ptr。也许标准委员会认为多个对象的存储应该使用容器，因此，没有定义像shared_array的智能指针。
+
+1 std::auto_ptr
+标准库中的auto_ptr是一种最常见的智能指针，一些书籍通常给出它的一个经典使用场景是在异常处理中：
+try {
+    int *ptr = new int;
+    // do some operations on ptr
+    delete ptr;
+} catch(exception &e) {
+    cout << e.what() << endl;
+}
+上面的程序在堆上分配一个int类型的对象，ptr指向这个对象，然后在ptr做一些操作，最后调用delete删除堆上的内存。如果在delete之前就发生了异常，那么程序执行序列会跳到异常处理代码中，于是，没有调用delete来释放这个int对象，发生了内存泄漏。
+那这样行不行呢：
+try {
+    int *ptr = new int;
+    // do some operations on ptr
+    delete ptr;
+} catch(exception &e) {
+    delete ptr;
+    cout << e.what() << endl;
+}
+在异常处理代码中加一个delete操作，这样肯定也可以。
+如果异常处理代码不在这里，而在别的地方呢，是不是需要在那儿调用delete呢？
+这就给程序员带来了极大的负担，而且代码的可读性也降低了。
+使用auto_ptr就十分方便。
+try {
+    auto_ptr<int> ptr(new int);
+    // do some operations on ptr
+} catch(exception &e) {
+    cout << e.what() << endl;
+}
+如果发生了异常，离开了ptr的作用域，就会调用ptr的析构函数，它就会释放ptr所管理的内存空间。
+
+接下来让我们看看auto_ptr提供了哪些操作，然后我们就知道如何使用auto_ptr。
+explicit auto_ptr(X* p = 0); //构造函数
+auto_ptr(auto_ptr& a); //拷贝构造函数
+X* get(); //获取该智能指针管理的对象的指针，主要用于判断该智能指针是否管理一块内存区域
+X& operator*(); //获取该智能指针管理的对象的引用
+X* operator->(); //获取该智能指针管理的对象的指针，主要用于访问该指针的成员
+auto_ptr& operator=(auto_ptr& a);
+template <class Y>
+auto_ptr& operator=(auto_ptr<Y>& a); //重载了两个智能指针的赋值操作符，一个保存的指针类型与要赋值的类型一致，另一个保存的指针类型与要赋值的类型不一致。
+X* release(); //将该智能指针的内部指针置为NULL，并返回它保存的对象的指针
+void reset(X* p = 0); //释放该智能指针保存的指针所指的对象，并设置新的值，如果不给参数或者参数为NULL，就释放该智能指针管理的对象的内存
+
+这里要注意的三个函数是operator=,release,reset:
+operator=会转移内存空间的所有权，也就是说operator=的调用者会获得参数管理的对象的所有权。
+release并不做任何关于内存的事，它只是先获得内存空间的地址，然后将智能指针的内部指针置为NULL，然后返回之前获得的内存空间的地址。
+reset会调用析构函数，然后将参数的指针赋给内部指针。
+当然，拷贝构造函数与operator=的行为类似。
+
+从上面的auto_ptr的行为可以看出它有下列特点：
+(1) 它的复制和赋值行为会导致所有权的转让，不能够共享所有权。
+这就导致了它不能用于STL的容器，由于STL的容器要求要添加的元素必须与容器内保存的对象一致，当将auto_ptr对象放到容器中时，当前的auto_ptr与容器中的对象不一致。
+
+(2) 由于它在析构时调用的是对象的delete，而不是delete []，因此，它所管理的是单一对象。
+
+2 boost::scoped_ptr与boost::scoped_array
+boost::scoped_ptr的行为与std::auto_ptr十分类似，不同点是：
+boost::scoped_ptr既不能共享所有权，也不能转让所有权，也就是说它只能通过初始时候获取对象的指针，不能进行复制和赋值(将拷贝构造函数和赋值操作符声明为private)，因此，在不应该进行指针的复制时，boost::scoped_ptr比auto_ptr更加安全。
+boost::scoped_array的行为与boost::scoped_ptr类似，只是它用来管理多个对象。
+
+3 boost::shared_ptr和std::shared_ptr，boost::shared_array
+boost::shared_ptr与std::auto_ptr的不同在于，boost::shared_ptr是用引用计数来实现的，也就是多个boost::shared_ptr可以用来管理同一个对象。
+boost::shared_ptr内部会保存一个计数器，初始时如果管理一个对象，计数器置为1，如果不管理对象，计数器就是0。
+当进行拷贝构造或者赋值时，技术器就会加1，因为多一个boost::shared_ptr管理这个对象。
+由于boost::shared_ptr可以进行拷贝构造或者赋值，因此，boost::shared_ptr可以用于STL的容器中。
+boost::shared_array的行为与boost::shared_ptr类似，只是它用来管理多个对象。
+C++11中的std::shared_ptr基本与boost::shared_ptr相同。
+
+4 boost::weak_ptr与std::weak_ptr
+weak_ptr通常是作为shared_ptr的助手而存在的，用于观测shared_ptr的资源情况。weak_ptr没有共享资源，它的构造不会引起指针引用计数的增加。
+通常，我们将shared_ptr的引用称为强引用，weak_ptr的引用称为弱引用。
+shared_ptr的引用使得资源不会被释放，而weak_ptr则不会。
+因此，weak_ptr的一个经典应用场景就是打破引用循环：两个类对象相互保存一个对方的shared_ptr，当要释放资源的时候，由于强引用的存在，导致两个对象都不能被释放，此时，可以将其中一个shared_ptr修改为weak_ptr，这样，能够打破循环，使得两个对象正确的释放。
+
+5 std::unique_ptr
+std::unique_ptr的行为与boost::scoped_ptr类似，std::unique_ptr也不能不能进行复制和赋值，但可以用移动操作(std::move)进行所有权的转让。
+也就是说下列行为是编译不过的：
+unique_ptr<int> pi(new int(1));
+unique_ptr<int> pi2 = pi; //compile error
+unique_ptr<int> pi3;
+pi3 = pi; //compile error
+但是，下面这样却是可以的：
+unique_ptr<int> func();
+unique_ptr<int> pi = func();
+上面的代码将返回值传给pi类似于pi = move(func());
+因此，unique_ptr通常应用于下面的场景：
+int* get_space()
+{
+    int *p = new int(1);
+    //do some operations on p;
+    return p;
+}
+
+int *p = get_space();
+delete p;
+get_space()中分配了一个int的空间，然后返回它的地址，因此，在函数外面要负责删除空间，如果程序员忘记了呢？
+那么，会造成内存泄漏。因此，可以这样来使用unique_ptr:
+unique_ptr<int>* get_space()
+{
+    unique_ptr<int> p(new int(1));
+    //do some operations on p;
+    return p;
+}
+
+unique_ptr<int> p = get_space();
+
+因此，std::unique_ptr与boost::scoped_ptr的不同在于：
+std::unique_ptr的赋值有移动语义，而且这种赋值是针对函数的返回值而言的，一般的赋值是不行的。
