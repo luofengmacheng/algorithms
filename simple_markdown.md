@@ -26,25 +26,25 @@
     这里你可以输入一段代码
   
 ### 比如我们可以在多行文本框里输入一段代码 
-		#include <stdio.h>
+	#include <stdio.h>
 
-		int main(int argc, char const *argv[])
-		{
-			unsigned int x = 0x04030201;
-			unsigned char *p = (unsigned char*)&x;
-			unsigned char c = *p;
-			if(c == 0x04) {
-				printf("Big Endian\n");
-			}
-			else if(c == 0x01) {
-			printf("Little Endian\n");
-			}
-			else {
-			printf("unknown Endian\n");
+	int main(int argc, char const *argv[])
+	{
+		unsigned int x = 0x04030201;
+		unsigned char *p = (unsigned char*)&x;
+		unsigned char c = *p;
+		if(c == 0x04) {
+			printf("Big Endian\n");
+		}
+		else if(c == 0x01) {
+		printf("Little Endian\n");
+		}
+		else {
+		printf("unknown Endian\n");
 		}
 
-			return 0;
-		}
+		return 0;
+	}
 ### 链接  
 1.[点击这里你可以链接到www.google.com](http://www.google.com)<br />
 2.[点击这里我你可以链接到我的博客](http://blog.csdn.net/luofengmacheng)<br />
