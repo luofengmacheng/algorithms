@@ -25,21 +25,29 @@
     你可以写入代码等,每行文字只要输入两个Tab再输入文字即可
     这里你可以输入一段代码
   
-### 比如我们可以在多行文本框里输入一段代码,来一个Java版本的HelloWorld吧  
-    public class HelloWorld {
-  
-      /**
-      * @param args
-   */
-   public static void main(String[] args) {
-   System.out.println("HelloWorld!");
-  
-   }
-  
-    }
+### 比如我们可以在多行文本框里输入一段代码 
+#include <stdio.h>
+
+int main(int argc, char const *argv[])
+{
+	unsigned int x = 0x04030201;
+	unsigned char *p = (unsigned char*)&x;
+	unsigned char c = *p;
+	if(c == 0x04) {
+		printf("Big Endian\n");
+	}
+	else if(c == 0x01) {
+		printf("Little Endian\n");
+	}
+	else {
+		printf("unknown Endian\n");
+	}
+
+	return 0;
+}
 ### 链接  
 1.[点击这里你可以链接到www.google.com](http://www.google.com)<br />
-2.[点击这里我你可以链接到我的博客](http://guoyunsky.iteye.com)<br />
+2.[点击这里我你可以链接到我的博客](http://blog.csdn.net/luofengmacheng)<br />
   
 ###只是显示图片  
 ![github](http://github.com/unicorn.png "github")
