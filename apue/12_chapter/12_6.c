@@ -5,8 +5,8 @@
  * title:	12.8 thread and signal
  * language:	C
  * 在主线程中利用pthread_sigmask()修改信号屏蔽字，阻塞SIGINT和SIGQUIT，然后创建线程，等待quitflag变量的改变。
- * 在thr_fn线程中，首先调用sigwait()等待信号的递送，由于sigwai会解除信号的阻塞（如何知道会解除哪些信号的阻塞呢？或者接收所有的信号？），
- * 因此，此时如果有信号的递送，就会进行信号的处理。
+ * 在thr_fn线程中，首先调用sigwait()等待信号的递送，由于sigwait会解除信号的阻塞
+ * 因此，此时如果有未决的信号，就会进行信号的处理。
  * 采用pthread_sigmask()修改屏蔽字，创建的子线程会继承主线程的信号屏蔽字。
  * 为了使sigwait()能够捕获到信号，在调用sigwait()之前必须阻塞它等待的信号，
  * 然后使用sigwait()等待信号时，sigwait()会自动修改信号集的阻塞状态，只会接收之前设置的阻塞的信号。
