@@ -1,8 +1,8 @@
 /*
  * author:	luo feng
  * date:	2014/6/27
- * source:	July
- * title:	4
+ * source:	July的微软面试100题系列
+ * title:	4.在二叉查找树中找出和为某一值的所有路径
  * language:	C++
  */
 
