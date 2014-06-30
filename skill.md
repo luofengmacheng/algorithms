@@ -1,10 +1,16 @@
 1 远程重启计算机
+```
+echo b > /proc/sysrq-trigger
+```
 
-echo b > /proc/sysrq-trigger 而不是reboot
+2 查看内存使用情况
+```
+free -m //以MB为单位查看内存使用情况
+```
 
 2 修改计算机的可用内存
 
-对于Redhat系(Fedora)
+对于Redhat系(包括Fedora)
 
 修改/etc/grub.conf，在kernel一行最后添加mem=1G就能够将可用内存修改为1GB
 ```
