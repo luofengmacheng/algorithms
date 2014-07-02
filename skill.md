@@ -8,7 +8,7 @@ echo b > /proc/sysrq-trigger
 free -m //以MB为单位查看内存使用情况
 ```
 
-2 修改计算机的可用内存
+3 修改计算机的可用内存
 
 对于Redhat系(包括Fedora)
 
