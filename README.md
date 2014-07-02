@@ -37,3 +37,5 @@ tack data structure
 11 [求二叉树中节点的最大距离](https://github.com/luofengmacheng/algorithms/blob/master/july_100/11.cpp)
 
 15 [将一个给定的二叉树转换为它的镜像](https://github.com/luofengmacheng/algorithms/blob/master/july_100/15.cpp)
+
+20 [将一个字符串转换为整数](https://github.com/luofengmacheng/algorithms/blob/master/LeetCode/string_to_integer.cpp)

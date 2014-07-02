@@ -4,6 +4,11 @@
  * source:	LeetCode OJ
  * title:	String to Integer(atoi)
  * language:	C++
+ * 说明：	将字符串转换为数字是常用的库函数atoi。真正实现的话，需要考虑的问题很多，在这里根据题目给的提示来考虑。
+ * case 1:	滤掉字符串起始位置的空白字符；
+ * case 2:	在字符串后面可以包含无效字符，不影响；
+ * case 3:	前面的有效字符如果不能构成合法的数字，字符串只包含空白空白字符或者字符串是空，就返回0；
+ * case 4:	如果得到的数字超过了所能表示的范围，就返回INT_MAX或者INT_MIN。
  */
 
 #include <iostream>
@@ -73,15 +78,15 @@ int main(int argc, char const *argv[])
 	const char *s6 = " 345bac"; // 345
 	const char *s7 = "9999999999999999999999999"; // INT_MAX
 	const char *s8 = " 10522545459"; // INT_MAX
-	const char *s9 = "+1"; // -1
+	const char *s9 = "-1"; // -1
 	Solution sol;
-	/*cout << sol.atoi(s1) << endl;
+	cout << sol.atoi(s1) << endl;
 	cout << sol.atoi(s2) << endl;
 	cout << sol.atoi(s3) << endl;
 	cout << sol.atoi(s4) << endl;
 	cout << sol.atoi(s5) << endl;
 	cout << sol.atoi(s6) << endl;
-	cout << sol.atoi(s7) << endl;*/
+	cout << sol.atoi(s7) << endl;
 	cout << sol.atoi(s8) << endl;
 	cout << sol.atoi(s9) << endl;
 
