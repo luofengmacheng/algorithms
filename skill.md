@@ -19,3 +19,16 @@ title Red Hat Enterprise Linux Server (2.6.27)
         kernel /vmlinuz-2.6.27 ro root=/dev/VolGroup00/LogVol00 rhgb quiet acpi=ht mem=1G
         initrd /initrd-2.6.27.img
 ```
+
+4 查看系统的IO统计信息
+```
+iostat -k 3 //以KB打印结果，3秒显示一次
+```
+
+5 将一个进程放入后台，并使它不受前台的影响，特别是用于远程连接时
+```
+./test //运行程序
+^Z //ctrl+z使程序暂停
+bg %(jobid) //将程序放入后台运行
+disown -h %(jobid)
+```
