@@ -34,6 +34,8 @@ tack data structure
 
 2 [实现Singleton模式](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/2.md)
 
+3 [二维数组中的查找(Yong式矩阵的查找)](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/3.md)
+
 ### July微软面试100题系列
 
 4 [在二叉查找树中找出和为某一值的所有路径](https://github.com/luofengmacheng/algorithms/blob/master/july_100/4.cpp)
