@@ -53,3 +53,5 @@ tack data structure
 15 [将一个给定的二叉树转换为它的镜像](https://github.com/luofengmacheng/algorithms/blob/master/july_100/15.cpp)
 
 20 [将一个字符串转换为整数](https://github.com/luofengmacheng/algorithms/blob/master/LeetCode/string_to_integer.cpp)
+
+25 [在字符串中找出连续最长的数字串](https://github.com/luofengmacheng/algorithms/blob/master/july_100/25.cpp)

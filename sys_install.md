@@ -23,3 +23,11 @@ sudo apt-get install fcitx-sunpinyin
 ./booststrap
 ./b2
 ```
+
+8 golang
+
+golang.org的官方网站被屏蔽了，可以通过下面的镜像网站下载：
+
+[http://tip.golang.so/](http://tip.golang.so/)
+
+[golang中文社区](http://golang.so/)
