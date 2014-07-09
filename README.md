@@ -55,3 +55,5 @@ tack data structure
 20 [将一个字符串转换为整数](https://github.com/luofengmacheng/algorithms/blob/master/LeetCode/string_to_integer.cpp)
 
 25 [在字符串中找出连续最长的数字串](https://github.com/luofengmacheng/algorithms/blob/master/july_100/25.cpp)
+
+29 [判断某个序列是否可能是栈的push顺序对应的pop顺序](https://github.com/luofengmacheng/algorithms/blob/master/july_100/29.cpp)
