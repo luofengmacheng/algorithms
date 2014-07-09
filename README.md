@@ -42,6 +42,8 @@ tack data structure
 
 4 [替换空格](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/4.md)
 
+5 [逆向打印单链表](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/5.md)
+
 ### July微软面试100题系列
 
 ***
