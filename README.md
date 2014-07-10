@@ -44,6 +44,8 @@ tack data structure
 
 5 [逆向打印单链表](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/5.md)
 
+6 [重建二叉树](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/6.md)
+
 ### July微软面试100题系列
 
 ***
