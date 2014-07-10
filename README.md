@@ -46,6 +46,8 @@ tack data structure
 
 6 [重建二叉树](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/6.md)
 
+7 [用两个栈实现队列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/7.md)
+
 ### July微软面试100题系列
 
 ***
