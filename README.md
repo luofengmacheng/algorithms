@@ -48,6 +48,12 @@ tack data structure
 
 7 [用两个栈实现队列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/7.md)
 
+8 [**旋转数组的最小数字](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/8.md)
+
+9 [斐波那契数列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/9.md)
+
+10 [二进制中1的个数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/10.md)
+
 ### July微软面试100题系列
 
 ***
