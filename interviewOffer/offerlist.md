@@ -1,5 +1,7 @@
 ## 剑指Offer
 
+[回到主目录](https://github.com/luofengmacheng/algorithms)
+
 1 [赋值运算符函数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/1.md)
 
 2 [实现Singleton模式](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/2.md)
