@@ -58,6 +58,10 @@ tack data structure
 
 12 [打印从1到最大的n位数(大数问题)](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/12.md)
 
+13 [在O(1)时间删除链表节点](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/13.md)
+
+14 [调整数组顺序使奇数位于偶数前面](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/14.md)
+
 ### July微软面试100题系列
 
 ***
