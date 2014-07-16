@@ -29,3 +29,11 @@
 13 [在O(1)时间删除链表节点](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/13.md)
 
 14 [调整数组顺序使奇数位于偶数前面](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/14.md)
+
+15 [链表中倒数第k个结点](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/15.md)
+
+16 [反转链表](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/16.md)
+
+17 [合并两个排序的链表](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/17.md)
+
+18 [树的子结构](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/18.md)
