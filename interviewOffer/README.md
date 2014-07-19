@@ -42,7 +42,7 @@
 
 20 [顺时针打印矩阵](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/20.md)
 
-21 [包含min函数的栈](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/21.md)
+21 [**包含min函数的栈](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/21.md)
 
 22 [栈的压入、弹出序列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/22.md)
 
