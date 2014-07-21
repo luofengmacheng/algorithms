@@ -1,4 +1,4 @@
-## C++
+## C++语言程序设计
 
 [回到主目录](https://github.com/luofengmacheng/algorithms)
 
