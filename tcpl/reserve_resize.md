@@ -88,7 +88,7 @@ cout << vec.capacity() << endl;
 
 vec.resize(7);
 cout << vec.size() << endl;
-cout << vec.capacity() << endl;*/
+cout << vec.capacity() << endl;
 
 vec.resize(11);
 cout << vec.size() << endl;
