@@ -52,8 +52,8 @@
 
 25 [二叉树中和为某一值的路径](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/25.md)
 
-26 [复杂链表的复制](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/26.md)
+26 [**复杂链表的复制](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/26.md)
 
 27 [二叉搜索树与双向链表](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/27.md)
 
-28 [字符串的排列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/28.md)
+28 [**字符串的排列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/28.md)
