@@ -8,6 +8,8 @@
 
 ### [剑指Offer笔记](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/README.md)
 
+### [hiho一下](https://github.com/luofengmacheng/algorithms/blob/master/hihocoder/README.md)
+
 ### [July微软面试100题系列笔记](https://github.com/luofengmacheng/algorithms/blob/master/july_100/README.md)
 
 There are some common data structures and algorithms.
