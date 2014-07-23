@@ -57,3 +57,11 @@
 27 [二叉搜索树与双向链表](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/27.md)
 
 28 [**字符串的排列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/28.md)
+
+29 [**数组中出现次数超过一半的数字](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/29.md)
+
+30 [最小的k个数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/30.md)
+
+31 [连续子数组的最大和](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/31.md)
+
+32 [从1到n整数中1出现的次数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/32.md)
