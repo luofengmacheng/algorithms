@@ -65,3 +65,13 @@
 31 [连续子数组的最大和](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/31.md)
 
 32 [从1到n整数中1出现的次数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/32.md)
+
+33 [把数组排成最小的数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/33.md)
+
+34 [丑数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/34.md)
+
+35 [第一个只出现一次的字符](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/35.md)
+
+36 [数组中的逆序对](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/36.md)
+
+37 [两个链表的第一个公共结点](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/37.md)
