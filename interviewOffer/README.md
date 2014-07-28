@@ -66,12 +66,22 @@
 
 32 [从1到n整数中1出现的次数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/32.md)
 
-33 [把数组排成最小的数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/33.md)
+33 [***把数组排成最小的数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/33.md)
 
-34 [丑数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/34.md)
+34 [**丑数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/34.md)
 
 35 [第一个只出现一次的字符](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/35.md)
 
 36 [数组中的逆序对](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/36.md)
 
 37 [两个链表的第一个公共结点](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/37.md)
+
+38 [数字在排序数组中出现的次数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/38.md)
+
+39 [二叉树的深度](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/39.md)
+
+40 [数组中只出现一次的数字] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/40.md)
+
+41 [和为s的两个数字VS和为s的连续正数序列] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/41.md)
+
+42 [翻转单词顺序VS左旋转字符串] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/42.md)
