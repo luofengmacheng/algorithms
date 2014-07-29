@@ -85,3 +85,9 @@
 41 [和为s的两个数字VS和为s的连续正数序列] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/41.md)
 
 42 [翻转单词顺序VS左旋转字符串] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/42.md)
+
+43 [n个骰子的点数] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/43.md)
+
+44 [扑克牌的顺子] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/44.md)
+
+45 [圆圈中最后剩下的数字] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/45.md)
