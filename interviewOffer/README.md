@@ -91,3 +91,9 @@
 44 [扑克牌的顺子] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/44.md)
 
 45 [圆圈中最后剩下的数字] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/45.md)
+
+46 [求1+2+...+n] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/46.md)
+
+47 [不用加减乘除做加法] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/47.md)
+
+48 [不能被继承的类] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/48.md)
