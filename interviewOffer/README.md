@@ -80,20 +80,20 @@
 
 39 [二叉树的深度](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/39.md)
 
-40 [数组中只出现一次的数字] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/40.md)
+40 [数组中只出现一次的数字](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/40.md)
 
-41 [和为s的两个数字VS和为s的连续正数序列] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/41.md)
+41 [和为s的两个数字VS和为s的连续正数序列](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/41.md)
 
-42 [翻转单词顺序VS左旋转字符串] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/42.md)
+42 [翻转单词顺序VS左旋转字符串](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/42.md)
 
-43 [n个骰子的点数] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/43.md)
+43 [n个骰子的点数(未做)](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/43.md)
 
-44 [扑克牌的顺子] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/44.md)
+44 [扑克牌的顺子](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/44.md)
 
-45 [圆圈中最后剩下的数字] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/45.md)
+45 [圆圈中最后剩下的数字](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/45.md)
 
-46 [求1+2+...+n] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/46.md)
+46 [求1+2+...+n](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/46.md)
 
-47 [不用加减乘除做加法] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/47.md)
+47 [不用加减乘除做加法](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/47.md)
 
-48 [不能被继承的类] (https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/48.md)
+48 [不能被继承的类](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/48.md)
