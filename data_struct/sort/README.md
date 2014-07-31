@@ -1,5 +1,7 @@
 ## 排序(C++版)
 
+[回到主目录](https://github.com/luofengmacheng/algorithms)
+
 1 [直接插入排序](https://github.com/luofengmacheng/algorithms/blob/master/data_struct/sort/insert_sort.cpp)
 
 2 [**希尔排序](https://github.com/luofengmacheng/algorithms/blob/master/data_struct/sort/shell_sort.cpp)
