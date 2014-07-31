@@ -15,9 +15,9 @@ template < typename input_iter, typename Compare >
 void insert_sort(input_iter beg, input_iter end, Compare cmp)
 {
 	for(input_iter iter = beg; iter != end; ++iter) {
-		
-		input_iter iter2 = iter;
 
+		input_iter iter2 = iter;
+		
 		while(iter2 != beg && cmp(*iter2, *(iter2 - 1))) {
 			iter_swap(iter2, iter2 - 1);
 			--iter2;
