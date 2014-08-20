@@ -1,4 +1,4 @@
-## hiho一下
+## hihoCoder
 
 [回到主目录](https://github.com/luofengmacheng/algorithms)
 
@@ -9,3 +9,5 @@
 2 [Trie树](https://github.com/luofengmacheng/algorithms/blob/master/hihocoder/2.md)
 
 3 [KMP算法](https://github.com/luofengmacheng/algorithms/blob/master/hihocoder/3.md)
+
+4 
