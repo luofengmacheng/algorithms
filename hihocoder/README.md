@@ -10,4 +10,4 @@
 
 3 [KMP算法](https://github.com/luofengmacheng/algorithms/blob/master/hihocoder/3.md)
 
-4 
+4 [字符消除](https://github.com/luofengmacheng/algorithms/blob/master/hihocoder/4.md)
