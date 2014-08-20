@@ -1,8 +1,4 @@
-### Linux
-
-***
-
-[poll实现的一个简单的服务器](https://github.com/luofengmacheng/algorithms/blob/master/apue/14_chapter/server_poll.c)
+### [Linux](https://github.com/luofengmacheng/algorithms/blob/master/apue/README.md)
 
 ### [C++语言程序设计](https://github.com/luofengmacheng/algorithms/blob/master/tcpl/README.md)
 
@@ -13,3 +9,5 @@
 ### [hiho一下](https://github.com/luofengmacheng/algorithms/blob/master/hihocoder/README.md)
 
 ### [July微软面试100题系列笔记](https://github.com/luofengmacheng/algorithms/blob/master/july_100/README.md)
+
+### [知识点集锦](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/README.md)
