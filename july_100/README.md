@@ -17,3 +17,5 @@
 29 [判断某个序列是否可能是栈的push顺序对应的pop顺序](https://github.com/luofengmacheng/algorithms/blob/master/july_100/29.cpp)
 
 30 [求从1到n的正数中1出现的次数](https://github.com/luofengmacheng/algorithms/blob/master/interviewOffer/32.md)
+
+43 [二叉树的非递归遍历](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/nonrecursion_traversal.md)
