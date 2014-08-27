@@ -20,6 +20,6 @@
 
 43 [二叉树的非递归遍历](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/nonrecursion_traversal.md)
 
-51 [和为n的连续正数序列](https://github.com/luofengmacheng/algorithms/blob/master/july_100/51.cpp)
+51 [和为n的连续正数序列](https://github.com/luofengmacheng/algorithms/blob/master/july_100/51.md)
 
-52 [二叉树的深度](https://github.com/luofengmacheng/algorithms/blob/master/july_100/52.cpp)
+52 [二叉树的深度](https://github.com/luofengmacheng/algorithms/blob/master/july_100/52.md)
