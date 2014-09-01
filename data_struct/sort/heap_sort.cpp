@@ -14,6 +14,7 @@ using namespace std;
 
 namespace luofengmacheng {
 
+// 建堆：将该节点的值从上往下调整
 template < typename input_iter, typename Compare >
 void make_heap(input_iter beg, input_iter end, Compare cmp)
 {
@@ -40,6 +41,7 @@ void make_heap(input_iter beg, input_iter end, Compare cmp)
 	}
 }
 
+// 弹出：将堆顶元素和最后一个元素交换，然后将堆顶的元素往下调整
 template < typename input_iter, typename Compare >
 void pop_heap(input_iter beg, input_iter end, Compare cmp)
 {
@@ -70,6 +72,7 @@ void pop_heap(input_iter beg, input_iter end, Compare cmp)
 	}
 }
 
+// 压入：将最后一个元素往上调整
 template < typename input_iter, typename Compare >
 void push_heap(input_iter beg, input_iter end, Compare cmp)
 {
