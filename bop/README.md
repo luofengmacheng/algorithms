@@ -17,3 +17,11 @@
 3.6 [判断两个链表是否相交](https://github.com/luofengmacheng/algorithms/blob/master/bop/3.6.md)
 
 3.7 [队列中取最大值操作问题](https://github.com/luofengmacheng/algorithms/blob/master/bop/3.7.md)
+
+3.8 [求二叉树中节点的最大距离](https://github.com/luofengmacheng/algorithms/blob/master/bop/3.8.md)
+
+3.9 [重建二叉树](https://github.com/luofengmacheng/algorithms/blob/master/bop/3.9.md)
+
+3.10 [分层遍历二叉树](https://github.com/luofengmacheng/algorithms/blob/master/bop/3.10.md)
+
+3.11 [程序改错](https://github.com/luofengmacheng/algorithms/blob/master/bop/3.11.md)
