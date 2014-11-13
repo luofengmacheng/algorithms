@@ -7,3 +7,5 @@
 2 [二叉树的非递归遍历](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/nonrecursion_traversal.md)
 
 3 [全排列](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/permutation.md)
+
+4 [RPC编程小例](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/rpc_example.md)
