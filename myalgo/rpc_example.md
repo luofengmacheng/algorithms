@@ -144,3 +144,7 @@ unable to register (SQUARE_PROG, SQUARE_VERS, udp).hust@hust-ubuntu:~/test/rpc/s
 测试结果：
 
 ![](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/pics/pic1.png)
+
+### 6 小结
+
+RPC能够让用户更多地关注业务逻辑，而减少对网络交互的关注，这样有助于构建网络应用。

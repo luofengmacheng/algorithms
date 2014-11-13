@@ -6,7 +6,7 @@ square.x client.c server.c
 ```
 rpcgen -C square.x
 ```
-就会生成三个文件：square.h square_clnt.c square_svc.c
+就会生成三个文件：square.h square_clnt.c square_svc.c square_xdr.c
 
 square.x中定义了远程过程调用中传递的参数以及过程的定位信息(程序名，版本号，过程号)，也就是客户机和服务器通信的信息。
 
