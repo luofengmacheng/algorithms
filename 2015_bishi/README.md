@@ -14,7 +14,7 @@
 
 6 [群硕(2014/10/8)](https://github.com/luofengmacheng/algorithms/blob/master/2015_bishi/qunshuo_bishi.md)
 
-7 [立方网(2014/10/9](https://github.com/luofengmacheng/algorithms/blob/master/2015_bishi/lifangwang_bishi.md)
+7 [立方网(2014/10/9)](https://github.com/luofengmacheng/algorithms/blob/master/2015_bishi/lifangwang_bishi.md)
 
 8 [PPTV聚力(2014/10/9)](https://github.com/luofengmacheng/algorithms/blob/master/2015_bishi/pptv_bishi.md)
 
