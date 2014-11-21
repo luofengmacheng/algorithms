@@ -47,7 +47,7 @@ int main(int argc, char const *argv[])
 					perror("accept");
 					exit(EXIT_FAILURE);
 				}
-				setnonblockint(conn_sock);
+				setnonblocking(conn_sock);
 				ev.events = EPOLLIN | EPOLLET;
 				ev.data.fd = conn_sock;
 				if(epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock, &ev) == -1) {
