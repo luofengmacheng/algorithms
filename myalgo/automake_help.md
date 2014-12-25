@@ -108,7 +108,7 @@ make
 
 autogen.sh的内容：
 
-``` shell
+```
 #!/bin/sh
 
 aclocal
