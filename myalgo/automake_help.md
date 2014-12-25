@@ -99,3 +99,28 @@ make
 ```
 
 于是，就得到可执行文件main。
+
+#### 1.5 小结
+
+以上一步一步介绍了从源代码生成可执行程序的过程。下面做个小结，并给出更为方便的方法：
+
+在生成可执行程序过程中需要创建两个文件configure.ac和Makefile.am，configure.ac指定可执行程序的程序名和版本，并声明要用automake生成Makefile，Makefile.am说明要生成的可执行程序，以及这些可执行程序依赖的源文件。还可以编辑第三个文件autogen.sh用于包含上面执行的一些命令。
+
+autogen.sh的内容：
+
+```
+#!/bin/sh
+
+aclocal
+
+autoconf
+
+autoheader
+
+automake --add-missing
+automake
+```
+
+因此，总共需要创建configure.ac、Makefile.am和autogen.sh。
+
+然后直接运行autogen.sh之后，就可以直接调用configure和make生成可执行程序了。
