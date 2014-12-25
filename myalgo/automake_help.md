@@ -3,7 +3,9 @@
 linux下当源文件很多时，可以使用automake工具来构建Makefile文件。
 
 [下载M4](http://ftp.gnu.org/gnu/m4/)
+
 [下载Autoconf](https://ftp.gnu.org/gnu/autoconf/)
+
 [下载Automake](http://ftp.gnu.org/gnu/automake/)
 
 ### 1 一个小示例
