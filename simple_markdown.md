@@ -87,3 +87,11 @@ int main(int argc, char const *argv[])
 | A | B | C |
 | D | E | F |
 | G | H | I |
+
+### 图标
+
+```sequence
+Alice->Bob: Hello Bob, how are you?
+Note right of Bob: Bob thinks
+Bob-->Alice: I am good thanks!
+```
