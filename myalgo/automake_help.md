@@ -124,3 +124,7 @@ automake
 因此，总共需要创建configure.ac、Makefile.am和autogen.sh。
 
 然后直接运行autogen.sh之后，就可以直接调用configure和make生成可执行程序了。
+
+参考资料：
+
+1 [例解 autoconf 和 automake 生成 Makefile 文件](http://www.ibm.com/developerworks/cn/linux/l-makefile/)
