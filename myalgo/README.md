@@ -11,3 +11,5 @@
 4 [RPC编程小例](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/rpc_example.md)
 
 5 [Automake使用帮助](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/automake_help.md)
+
+6 [Berkeley DB数据库操作](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/bdb_operation.md)
