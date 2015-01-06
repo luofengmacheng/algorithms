@@ -136,6 +136,180 @@ dbc->get(dbc, &key, &data, DB_SET);
 dbc->put(dbc, &key, &data, DB_CURRENT);
 ```
 
+### 2.4 表的查找
+
+假设需要查找学生学号为100的学生。从上面知道，可以使用游标。
+
+``` C
+DBT key, data;
+stu_key skey;
+stu_data sdata;
+
+skey.stu_num = 100;
+memset(&key, 0, sizeof(key));
+memset(&data, 0, sizeof(data));
+key.data = &skey;
+key.size = sizeof(skey);
+
+dbc->get(dbc,
+	 &key,
+	 &data,
+	 DB_SET);
+```
+
+使用游标查询时，可以对游标指示的记录进行更新。
+
+如果只是想查询，并不需要更新，可以使用表的句柄的get操作：
+
+``` C
+DBT key, data;
+stu_key skey;
+stu_data sdata;
+
+skey.stu_num = 100;
+memset(&key, 0, sizeof(key));
+memset(&data, 0, sizeof(data));
+key.data = &skey;
+key.size = sizeof(skey);
+
+dbp->get(dbp,
+	 NULL,
+	 &key,
+	 &data,
+	 0);
+```
+
+但是，上面的方法只能返回单个记录，如何返回多个记录呢？
+
+当根据键的范围进行遍历时，可以如下操作，例如，当查询学号在100到200之间的学生时，SQL语句为：
+
+```
+SELECT * FROM students WHERE stu_num >= 100 AND stu_num < 200
+```
+
+可以使用游标来创建一个范围，起点可以用游标定位，结束点则由应用程序完成。
+
+``` C
+DBT  key, data;
+DBC *dbc;
+stu_key skey;
+
+skey.stu_num = 100;
+memset(&key, 0, sizeof(key));
+memset(&data, 0, sizeof(data));
+key.data = &skey;
+key.size = sizeof(skey);
+key.flags = DB_DBT_USERMEM;
+key.ulen = sizeof(skey);
+
+dbp->cursor(dbp,
+	    NULL,
+	    &dbc,
+	    0);
+
+for(ret = dbc->get(dbc, &key, &data, DB_SET_RANGE);
+	ret == 0;
+	ret = dbc->get(dbc, &key, &data, DB_NEXT)) {
+
+	if(skey.stu_num >= 200) {
+		break;
+	}
+}
+```
+
+以上代码需要注意：
+
+* 以DB_SET_RANGE标记作为循环的开始。
+* 用DB_NEXT标记定位下一个记录。
+* 键中指定DB_DBT_USERMEM标记，表示检索到的键置于用户指定的内存中。
+
+当要查找特定的学生时，也就是说条件不是键时，只能遍历整个表。
+
+例如，当要查找所有7年级的学生时：
+
+```
+SELECT * FROM students WHERE grade=7
+```
+
+``` C
+DBT  key, data;
+DBC *dbc;
+stu_data *sdata;
+
+memset(&key, 0, sizeof(key));
+memset(&data, 0, sizeof(data));
+
+dbp->cursor(dbp,
+	    NULL,
+	    &dbc,
+	    0);
+
+for(ret = dbc->get(dbc, &key, &data, DB_FIRST);
+    ret == 0;
+    ret = dbc->get(dbc, &key, &data, DB_NEXT)) {
+
+    sdata = data.data;
+    if(sdata->grade == 7) {
+	/* process this record */
+    }
+}
+```
+
+### 2.5 表的删除
+
+当某个学生离校时，需要将该生的信息删除：
+
+```
+DELETE FROM students WHERE stu_num=100
+```
+
+``` C
+DBT key;
+stu_key skey;
+
+skey.stu_num = 100;
+memset(&key, 0, sizeof(key));
+key.data = &skey;
+key.size = sizeof(skey);
+
+dbp->del(dbp,
+	 NULL,
+	 &key,
+	 0);
+```
+
+当然，也可以使用游标：
+
+``` C
+DB *dbp
+DBC *dbc;
+DBT key;
+stu_key skey;
+
+skey.stu_num = 100;
+memset(&key, 0, sizeof(key));
+key.data = &skey;
+key.size = sizeof(skey);
+
+dbp->cursor(dbp,
+	   NULL,
+	   &dbc,
+	   0);
+
+dbc->get(dbc,
+	 &key,
+	 NULL,
+	 DB_SET);
+
+dbc->del(dbc, 0);
+```
+
+## 3 小结
+
+这里简单介绍了Berkeley DB数据库，然后以学生表为例给出了表的创建、插入、修改、查找、删除等操作。
+
 参考资料：
 
 1 [SQL 开发人员 Oracle Berkeley DB 指南](http://www.oracle.com/technetwork/cn/articles/seltzer-berkeleydb-sql-085418-zhs.html)
+
+2 [Berkeley DB API](http://docs.oracle.com/cd/E17076_04/html/api_reference/C/frame_main.html)
