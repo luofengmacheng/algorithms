@@ -17,3 +17,7 @@
 7 [解决ubuntu 13.04中fopen打开大于2GB文件失败的问题](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/fopen_error.md)
 
 8 [C语言中的qsort和C++中的sort](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/qsort_sort.md)
+
+9 [从命令行获取参数的技巧](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/get_arguments_from_cmd.md)
+
+10 [如何修改linux的各种限制及ulimit命令](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/linux_limits.md)
