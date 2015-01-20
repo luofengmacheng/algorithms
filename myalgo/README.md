@@ -20,4 +20,6 @@
 
 9 [从命令行获取参数的技巧](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/get_arguments_from_cmd.md)
 
-10 [如何修改linux的各种限制及ulimit命令](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/linux_limits.md)
+10 [修改linux的各种限制及ulimit命令的使用](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/linux_limits.md)
+
+11 [diff与patch命令的使用](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/diff_patch.md)
