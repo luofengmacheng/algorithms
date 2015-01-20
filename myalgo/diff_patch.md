@@ -121,7 +121,7 @@ $ diff -c wo1.c wo2.c
 
 6 -X FILE 当比较文件夹时，忽略某文件
 
-### patch
+### 2 patch
 
 diff的输出称为补丁(patch)，可以使用patch程序对from-file打补丁，从而得到to-file。
 
