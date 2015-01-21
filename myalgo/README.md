@@ -23,3 +23,5 @@
 10 [修改linux的各种限制及ulimit命令的使用](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/linux_limits.md)
 
 11 [diff与patch命令的使用](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/diff_patch.md)
+
+12 [vim的配色方案的调整](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/vim_color.md)
