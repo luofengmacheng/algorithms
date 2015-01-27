@@ -25,3 +25,5 @@
 11 [diff与patch命令的使用](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/diff_patch.md)
 
 12 [vim的配色方案的调整](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/vim_color.md)
+
+13 [hadoop运行WordCount程序](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/hadoop_wordcount.md)
