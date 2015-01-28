@@ -27,3 +27,5 @@
 12 [vim的配色方案的调整](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/vim_color.md)
 
 13 [hadoop运行WordCount程序](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/hadoop_wordcount.md)
+
+14 [fdisk与mkfs](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/fdisk_mkfs.md)
