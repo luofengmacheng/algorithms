@@ -29,3 +29,5 @@
 13 [hadoop运行WordCount程序](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/hadoop_wordcount.md)
 
 14 [fdisk与mkfs](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/fdisk_mkfs.md)
+
+15 [Sublime Text安装插件](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/sublime_plugins.md)
