@@ -1,0 +1,140 @@
+sys_open
+	do_sys_open
+		getname将文件名从用户空间拷贝到内核空间
+		get_unused_fd_flags获取可用的文件描述符
+		do_filp_open获取文件指针
+			path_lookup_open没有设置O_CREAT标志
+			path_lookup_create需要创建文件，和path_lookup_open一样，都调用__path_lookup_intent_open，只是在标志参数中添加LOOKUP_CREATE
+				__path_lookup_intent_open
+					get_empty_filp获取可用的空文件指针
+					do_path_lookup如果第一个字符'/'说明路径的查找从根目录开始，将nd中的path字段设置为根目录；如果从当前目录开始，就将nd中的path字段设置位当前目录；
+						path_walk
+							link_path_walk
+								__link_path_walk首先，跳过开始的几个'/'，然后将索引节点inode指向当前查找目录的索引节点。
+			lookup_hash
+				__lookup_hash
+					d_hash
+					cached_lookup在缓存中查找
+					d_alloc如果没有，就分配一个dentry
+					inode->i_op->lookup(capfs_lookup)
+			mnt_want_write(如果文件不存在，需要创建文件)
+			__open_namei_create
+				vfs_create
+					dir->i_op->create(capfs_create)
+			nameidata_to_filp把nameidata对象转化为文件指针
+			mnt_drop_write
+			返回filp
+			path_to_nameidata(文件存在)
+			nameidata_to_filp
+
+capfs_lookup
+	capfs_wrap_lookupdata
+		CAPFS_SERVER(dir)找到合适的mds
+		CAPFS_MDS_PROTO(dir)->lookup => capfs_mds_proc_lookup
+		capfs_mds_proc_lookup
+			首先，初始化rpc_message，里面包含了请求的信息和接收结果的信息，调用rpc_call_sync将消息发送给MDS
+			handle_res_status将MDS结果状态转换为本地状态
+			copy_fattr将结果拷贝到参数制定的内存中
+	capfs_fhget
+		capfs_get_ino通过文件的cap_id得到索引节点号
+		iget5_locked(sb,hashval,test,set,data)使用ifind()在索引节点缓存中查找hashval和data指定的索引节点，如果找到了，就增加引用计数。该函数是iget_locked()的通用版本。如果索引节点不在缓存中，调用get_new_inode()分配一个新的索引节点，在返回之前将它锁定，加入到哈希表，并设置I_NEW标志。文件系统在填充它之后，可以调用unlock_new_inode()来解锁
+		如果是新分配的索引节点，就对它的成员进行初始化
+	d_splice_slias
+
+capfs_create
+	capfs_wrap_createdata
+		CAPFS_SERVER
+		CAPFS_MDS_PROTO(dir)->create => capfs_mds_proc_create
+	capfs_fhget
+	capfs_update_inode
+	d_splice_alias
+
+
+/*********************************************/
+
+sys_read
+	fget_light轻量级的文件查询操作，通过文件描述符获得文件指针
+	file_pos_read得到文件读取位置
+	vfs_read先检查文件模式，再检查是否有读写函数
+		rw_verify_area
+		file->f_op->read => do_sync_read
+		do_sync_read
+			init_sync_kiocb
+			file->f_op->aio_read => cap_file_read
+			cap_file_read
+				cap_revalidate_mapping
+					cap_invalidate_mapping
+				generic_file_aio_read
+					generic_segment_checks在进行实际操作之前做一些检查
+					do_generic_file_read
+			wait_on_retry_sync_kiocb
+	file_pos_write更新文件读取位置
+	fput_light
+
+do_generic_file_read
+	find_get_page从页缓存中查找是否有这个页，
+	page_cache_sync_readahead如果没有找到，启动同步预读
+	find_get_page再次从页缓存中查找是否有这个页
+	page_cache_async_readahead从缓存中找到了这个页，判断预读标志，启动异步预读
+	mappings->a_ops->readpage => cap_readpage
+	cap_readpage
+		cap_wb_page
+			cap_wb_page_priority
+				cap_writepage_locked
+					cap_pgio_init_write
+						cap_pgio_init初始化pageio_descriptor
+					cap_do_writepage
+					cap_pgio_complete
+				cap_sync_mapping_wait
+		cap_readpage_async
+			create_cap_pg_req
+				cap_page_alloc在混村中分配一个struct cap_pg
+				然后初始化这个cap_pg
+			cap_pg_list_add_req将这个请求放到这个页的请求链表中
+			cap_pagein_one
+				cap_readdata_alloc在内存池中分配一个capfs_read_data，然后对它进行初始化
+				cap_pg_list_entry
+				cap_pg_list_rm_req
+				cap_pg_list_add_req
+				cap_read_rpcsetup
+					capfs_try_to_read_data进行实际的读操作
+						lo_readpages
+							layout_update
+						read_pagelist => objlayout_read_pagelist
+
+cap_do_writepage
+	cap_pgio_cond_complete
+		cap_pg_list_entry
+		cap_pgio_doio(这里desc->pg_list应该是空，也就是直接将pg_count和pg_base置为0)
+	cap_page_async_flush
+
+objlayout_read_pagelist
+		
+	
+
+内核的预读
+struc file_ra_state {
+	pgoff_t start;            //预读的起始位置
+	unsigned int size;        //预读多少个页
+	unsigned int async_size;  //当还有多少个页要预读时进行异步预读
+	unsigned int ra_pages;    //最大预读窗口
+	int mmap_miss;            //
+	loff_t prev_pos;          //
+};
+
+On-demand预读设计
+为了重叠应用程序思考时间的磁盘I/O时间，我们对预读流水线化：不要等到应用程序消耗所有的预读的页，然后停留在失效页上；只要在预读窗口中剩下async_size个页，就提交一个异步预读I/O。正常情况下，async_size等于size，以便最大化流水线。
+
+在交叉顺序读时，在同一个fd上的并发流会使对方的预读状态失效。因此，我们在(start+size-async_size)处设置PG_readahead标志，将它作为预读指示器。这个标志不会设置在已经读取的缓存页上，以避免无谓的预读，并节省页缓存的查询次数。
+
+prev_pos跟踪上次读请求的最后访问的字节。调用者应该保存它，用它来检测小块的随机读。注意，预读算法只是很宽泛地检查顺序模式。因此，交叉读可能会被当作顺序读。
+
+有一个特例：如果应用程序试图访问的第一个页刚好是文件的第一页，就假设会发生线性读操作，窗口大小立即被设置为基于I/O请求大小和最大预读的初始大小。
+
+page_cache_sync_readahead
+	ondemand_readahead
+
+/********************************************/
+
+sys_close
+	filp_close
