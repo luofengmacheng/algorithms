@@ -103,20 +103,21 @@ free可以显示系统当前的内存大小以及使用量，笔者电脑运行�
 
 ### 5 其它命令
 
-* 1 uname
-uname可以用于查看操作系统的信息。
-该命令常用的选项有：
--a 显示所有信息，例如
-Linux hust-ubuntu 3.8.0-19-generic #29-Ubuntu SMP Wed Apr 17 18:19:42 UTC 2013 i686 i686 i686 GNU/Linux
--r 查看内核发行号，例如
-3.8.0-19-generic
-* 3 scp
+* 1 scp
+
 远程拷贝命令
+
 本地=>远程
+
 scp filename root@remote_ip:remote_dir
+
 scp -r local_dir root@remote_ip:remote_dir
+
 远程=>本地
+
 scp root@remote_ip:remote_dir/filename local_dir
+
 scp -r root@remote_ip:remote_dir local_dir
-* 4 grub.conf
-RedHat中/boot/grub/grub.conf中包含启动选项。
+* 2 grub.conf
+
+RedHat中/boot/grub/grub.conf中包含启动选项，可以修改默认的启动项。
