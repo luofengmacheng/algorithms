@@ -103,7 +103,7 @@ free可以显示系统当前的内存大小以及使用量，笔者电脑运行�
 
 ### 5 其它命令
 
-* 1 scp
+#### 5.1 scp
 
 远程拷贝命令
 
@@ -118,6 +118,7 @@ scp -r local_dir root@remote_ip:remote_dir
 scp root@remote_ip:remote_dir/filename local_dir
 
 scp -r root@remote_ip:remote_dir local_dir
-* 2 grub.conf
+
+#### 5.2 grub.conf
 
 RedHat中/boot/grub/grub.conf中包含启动选项，可以修改默认的启动项。
