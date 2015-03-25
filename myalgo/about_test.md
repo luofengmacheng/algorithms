@@ -30,24 +30,9 @@ cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
 
 另一个查看CPU信息的命令是lscpu，该命令给出CPU的汇总信息，比较直观，例如，笔者的电脑的结果为：
 
-Architecture:          i686 CPU架构为686
-CPU op-mode(s):        32-bit, 64-bit 支持32位和64位
-Byte Order:            Little Endian 小端
-CPU(s):                2 双核
-On-line CPU(s) list:   0,1
-Thread(s) per core:    1
-Core(s) per socket:    2
-Socket(s):             1
-Vendor ID:             GenuineIntel 厂商ID
-CPU family:            6
-Model:                 23
-Stepping:              10
-CPU MHz:               3067.541 CPU频率
-BogoMIPS:              6135.08
-Virtualization:        VT-x
-L1d cache:             32K 一级数据缓存
-L1i cache:             32K 一级指令缓存
-L2 cache:              2048K 二级缓存
+![](https://github.com/luofengmacheng/algorithms/blob/master/myalgo/pics/about_test.png)
+
+该CPU的架构为i686，支持32位和64位，数据的存储方式为小端，有两个核心，一级数据缓存为32k，一级指令缓存为32k，二级缓存为2048k。
 
 #### 4.2 内存
 
