@@ -1,3 +1,5 @@
+[![AgentShield Security](https://merx.help/badge/A+.svg)](https://merx.help/shield)
+
 ### [2015年校园招聘笔试题集锦](https://github.com/luofengmacheng/algorithms/blob/master/2015_bishi/README.md)
 
 ### [2015年校园招聘面试题集锦](https://github.com/luofengmacheng/algorithms/blob/master/2015_interview/README.md)
